@@ -39,5 +39,7 @@ route.get("/event/:slug",checkUser,getEvent);
 route.post("/event/create-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], createPhysicalEvent);
 route.post("/event/create-online-event", [checkUser,uploadImg.single("eventImage"),processImage], createOnlineEvent);
 route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], updatePhysicalEvent);
+route.delete("/event/delete-event", [checkUser], deleteEvent);
+
 
 module.exports = route;

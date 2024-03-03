@@ -162,17 +162,8 @@ async function updatePhysicalEvent(req, res, next) {
 
 async function updateOnlineEvent(req, res, next) {
   try {
-    const { title, description, startDate, dueDate, quota, category, eventId } =
-      req.body;
-    if (
-      !title ||
-      !description ||
-      !startDate ||
-      !dueDate ||
-      !quota ||
-      !category ||
-      !eventId
-    ) {
+    const { title, description, startDate, dueDate, quota, category, eventId } = req.body;
+    if (!title || !description || !startDate || !dueDate || !quota || !category || !eventId) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
 
@@ -209,10 +200,31 @@ async function updateOnlineEvent(req, res, next) {
   }
 }
 
-function deleteEvent(req, res, next) {
+async function deleteEvent(req, res) {
+  try {
+    const { eventId } = req.body;
 
+    if (!eventId) {
+      return res.status(400).json({ message: "Event not found." });
+    }
 
+    const isEventExist = res.locals.user.events.some((id) => new ObjectId(id).equals(eventId));
 
+    if (!isEventExist) {
+      return res.status(401).json({ message: "Unauthorized." });
+    }
+
+    const result = await Event.deleteOne({ _id: new ObjectId(eventId) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Event was not deleted." });
+    }
+
+    return res.status(201).json({ message: "Event has been deleted succesfully." });
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
+  }
 }
 
 async function getEvent(req, res, next) {
