@@ -1,0 +1,129 @@
+section .manage-events-header {
+  flex-basis: 100%;
+  padding: 12px 0;
+  border-radius: 4px;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+section .manage-events {
+  font-family: "Raleway", sans-serif;
+  display: flex;
+  justify-content: space-between;
+  column-gap: 32px;
+}
+
+section .manage-events .manage-events-navigation {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+section .manage-events .manage-events-navigation li {
+  cursor: pointer;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  text-align: center;
+  border-radius: 4px;
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+section .manage-events .manage-events-navigation li:hover {
+  box-shadow: 0px 0px 10px 0px rgba(183, 28, 28, 0.3);
+}
+
+section .manage-events .manage-events-dashboard {
+  flex: 1;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 12px;
+}
+
+section .manage-events .manage-events-dashboard form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+section .manage-events .manage-events-dashboard form label {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+section
+  .manage-events
+  .manage-events-dashboard
+  form
+  label
+  .quill
+  .ql-snow
+  .ql-editor {
+  min-height: 256px;
+  max-height: 1024px;
+}
+
+section .manage-events .manage-events-dashboard form label input[type="date"] {
+  width: 25%;
+  cursor: pointer;
+  margin: 8px 0 8px 0;
+  padding: 12px 16px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+section
+  .manage-events
+  .manage-events-dashboard
+  form
+  label
+  input[type="number"] {
+  width: 100%;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  border-radius: 4px;
+  transition: box-shadow 0.1 ease-in-out;
+}
+
+section
+  .manage-events
+  .manage-events-dashboard
+  form
+  label
+  input[type="number"]:focus {
+  width: 100%;
+  box-shadow: 0px 0px 10px 0px rgba(183, 28, 28, 0.3);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+section .manage-events .manage-events-dashboard form label select {
+  width: 100%;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+section .manage-events .manage-events-dashboard form label input[type="file"] {
+  width: 25%;
+  padding: 12px 0;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.preview-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  width: 100%;
+}
+
+section .manage-events .manage-events-dashboard form input[type="date"]:focus {
+  box-shadow: 0px 0px 10px 0px rgba(183, 28, 28, 0.3);
+}

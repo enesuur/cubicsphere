@@ -1,0 +1,84 @@
+section .hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+section .hero article h1 {
+    font-family: "Inter",sans-serif;
+    font-weight: 200;
+    font-size: 2.75rem;
+    text-align: center;
+}
+
+section .hero article h1 span{
+    font-weight: 300;
+    font-size: 2.5rem;
+}
+
+section .hero article p {
+    font-family: "Raleway",sans-serif;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    text-align: center;
+    background-image: linear-gradient(to right, #ff0000, #0000ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+section .features .card-container {
+    display: grid;
+    grid-template-columns: repeat(1,minmax(0,1fr));
+    row-gap: 32px;
+}
+
+section .features figure{
+    flex-basis: 50%;
+    height: auto;
+}
+
+section .features figure picture{
+    width: 100%;
+    height: auto;
+    vertical-align: center;
+}
+
+section .features figure picture img{
+    width: 100%;
+    height: auto;
+    vertical-align: center;
+    border-radius: 8px;
+    transition: transform 0.2s ease-in-out;
+}
+
+section .features figure picture img:hover {
+    transform: scale(1.05);
+}
+
+section .features .card-container .card-item  {
+    display: flex;
+    align-items: center;
+    column-gap: 32px;
+}
+
+section .features .card-container .card-item article  {
+    flex-basis: 50%;
+}
+
+section .features .card-container .card-item article h2 {
+    font-family: 'Inter',sans-serif,serif;
+    font-size: 2rem;
+    font-weight: 300;
+    text-align: center;
+}
+
+section .features .card-container .card-item article p {
+    font-family: 'Raleway',sans-serif,serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin: 24px 0;
+    font-weight: 400;
+    letter-spacing: 0.4px;
+    text-align: center;
+}

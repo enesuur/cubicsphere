@@ -1,0 +1,104 @@
+footer {
+    font-family: 'Inter', sans-serif, serif;
+    margin-top: 80px;
+    padding: 32px;
+    height: auto;
+    background-color: var(--primary-darker-color);
+    color: var(--white);
+    font-weight: 300;
+  }
+  
+  footer nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 48px;
+    justify-content: space-between;
+  }
+  
+  footer nav .site-navigation {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  
+  footer nav .site-navigation li {
+    transition: text-decoration 0.1s ease-in-out;
+  }
+  
+  footer nav .site-navigation .navigation-header {
+    font-size: 1.25rem;
+  }
+  
+  footer nav .site-navigation .navigation-header:hover {
+    text-decoration: none !important;
+  }
+  
+  footer nav .site-navigation li:hover {
+    text-decoration: underline;
+  }
+  
+  footer nav .footer-aside {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  footer nav div:first-child {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+  
+  .footer-title {
+    font-size: 1.5rem; 
+  }
+  
+  .footer-subtitle {
+    font-size: 0.875rem;
+  }
+  
+  footer nav .social-links-wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+  }
+  
+  footer nav .social-links-wrapper h2 {
+    font-size: 1.125rem; 
+  }
+  
+  footer nav .social-links-wrapper .social-links {
+    display: flex;
+    align-items: center;
+    column-gap: 20px; 
+  }
+  
+  footer nav .social-links-wrapper .social-links a svg {
+    fill: var(--white);
+  }
+  
+
+  @media screen and (max-width: 768px) {
+    footer nav {
+      flex-direction: column;
+      row-gap: 32px; 
+    }
+  
+    footer nav ul,
+    footer nav .footer-aside {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+  
+    footer nav div:first-child {
+      margin-bottom: 24px;
+      align-items: center;
+    }
+  }
+  

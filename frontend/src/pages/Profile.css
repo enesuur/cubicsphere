@@ -1,0 +1,198 @@
+.profile-showcase {
+    font-family: "Raleway",sans-serif;
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    position: relative;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.profile-showcase .profile-banner {
+    width: 100%;
+    height: 256px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.profile-showcase .profile-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+
+.profile-showcase .profile-avatar {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    border: 3px solid var(--background-color);
+}
+
+.profile-showcase .profile-avatar .profile-username {
+    text-align: center;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-showcase .profile-avatar .profile-username span {
+    font-family: "Inter",sans-serif;
+    font-size: 0.82em;
+    color: var(--font-color);
+}
+
+.profile-showcase .profile-avatar .profile-username a {
+    font-size: 0.92em;
+    margin-top: 4px;
+    color: var(--font-color);
+    font-weight: 400;
+}
+
+.profile-showcase .profile-avatar .profile-username {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.profile-showcase .profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+.profile-info {
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+    border: none;
+    background-color: var(--box-color);
+    padding: 36px;
+    border-radius: 0 0 4px 4px;
+    height: auto;
+}
+
+.profile-info .profile-social {
+    display: flex;
+    gap: 32px;
+}
+
+.profile-info .profile-social div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-info .profile-social div svg {
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+}
+
+.profile-info .profile-social div span {
+    font-size: 0.92rem;
+}
+
+.profile-info .profile-social span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-size: 1em;
+}
+
+.profile-info .profile-stats {
+    display: flex;
+    gap: 24px;
+}
+
+.profile-info .profile-stats div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.92rem;
+    cursor: pointer;
+}
+
+.profile-info .profile-stats div span:first-child{
+    font-family: "Inter",sans-serif;
+}
+
+.profile-biography {
+    width: 100%;
+    border-radius: 4px;
+    padding: 36px;
+}
+
+.profile-biography article {
+    font-family: "Raleway",sans-serif;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    row-gap: 24px;
+    border-radius: 4px;
+    min-height: 256px;
+}
+
+.profile-biography article h2 {
+    font-family: "Inter",sans-serif;
+    font-weight: 200;
+    font-size: 1.75rem;
+}
+
+.profile-biography article p {
+    font-size: 0.92rem;
+
+}
+
+
+@media (max-width:768px) {
+    .profile-showcase .profile-avatar {
+        width: 96px;
+        height: 96px;
+    }
+
+    .profile-info {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 32px;
+
+    }
+
+    .profile-info .profile-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .profile-info .profile-social {
+        margin-top: 96px;
+        gap: 48px;
+    }
+
+    .profile-info .profile-stats div {
+        font-size: 0.825rem;
+    }
+    
+    .profile-biography article p {
+        line-height: 1.75;
+        font-size: .825rem;
+    }
+
+}

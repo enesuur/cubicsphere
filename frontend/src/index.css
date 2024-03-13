@@ -1,0 +1,164 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&family=Raleway:wght@300;400;600&display=swap");
+*,
+*::before,
+*::after {
+  padding: 0;
+  border: 0;
+  outline: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  list-style: none;
+}
+
+html {
+  font-family: FT Base, -apple-system, system-ui, BlinkMacSystemFont,
+    SF Pro Text, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+:root {
+  --background-color: radialGradient(
+    "
+  60% 120% at 50% 50%,
+  hsla(0, 0%, 100%, 0) 0,
+  rgba(252, 205, 238, 0.5) 100%"
+  );
+  --primary-color: #c62828;
+  --primary-darker-color: #b71c1c;
+  --secondary-color: rgb(148, 132, 198);
+  --dark-color: #1a1715;
+  --font-primary-color: #161616;
+  --font-secondary-color: #f4f4f4;
+  --button-primary-color: #1a1715;
+  --button-secondary-color: #2b2826;
+  --font-paragraph-color: #4d5054;
+  --white: #ffffff;
+  --red: #800000;
+  --gray-color: #424242;
+}
+
+hr {
+  width: 100%;
+  border: 0.5px solid var(--font-paragraph-color);
+}
+
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  z-index: -2;
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff;
+  background-image: radial-gradient(
+    60% 120% at 50% 50%,
+    hsla(0, 0%, 100%, 0) 0,
+    rgba(252, 205, 238, 0.5) 100%
+  );
+}
+
+a,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: inherit;
+  overflow-wrap: break-word;
+}
+
+b,
+strong {
+  font-weight: bolder;
+}
+
+em {
+  font-style: italic;
+}
+
+u {
+  text-decoration: underline;
+}
+
+s {
+  text-decoration: line-through;
+}
+
+small {
+  font-size: 0.875em;
+}
+
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  vertical-align: middle;
+}
+
+section {
+  margin-top: 144px;
+  margin-bottom: 144px;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.container,
+.container-m {
+  width: 100%;
+  padding: 0 16px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.container-fluid {
+  width: 100vw;
+}
+
+/* container infrastracture. */
+@media (min-width: 480px) {
+  .container,
+  .container-m {
+    max-width: 480px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container,
+  .container-m {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 992px) {
+  .container {
+    max-width: 992px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+  }
+}
