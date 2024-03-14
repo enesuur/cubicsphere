@@ -7,7 +7,6 @@ import { useState } from "react";
 export default function CreateOnlineEvent() {
   const [editorState, setEditorState] = useState("");
   const [file, setFile] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState("Webinar");
   const [onlineEventData, setOnlineEventData] = useState({
     title: "",
     description: "",
@@ -113,8 +112,8 @@ export default function CreateOnlineEvent() {
           value={onlineEventData.category}
           onChange={handleInputChange}
         >
-          <option value={onlineEventData.category}>Webinar</option>
-          <option value={onlineEventData.category}>Conference</option>
+          <option value={"Webinar"}>Webinar</option>
+          <option value={"Conference"}>Conference</option>
         </select>
       </label>
       <label htmlFor="eventImage">
@@ -134,7 +133,7 @@ export default function CreateOnlineEvent() {
           <img src={file} alt="Preview" style={{ maxWidth: '256px' }} />
         </div>
       )}
-      <button type="submit">Create Event</button>
+      <button type="submit" className="btn-submit">Create Event</button>
     </form>
   );
 }

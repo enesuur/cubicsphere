@@ -1,6 +1,9 @@
 import { useState } from "react";
 import CreateOnlineEvent from "../components/manage/event/CreateOnlineEvent";
 import "./ManageEvents.css";
+import CreatePhsyicalEvent from "../components/manage/event/CreatePhysicalEvent";
+import UpdateOnlineEvent from "../components/manage/event/UpdateOnlineEvent";
+import UpdatePhysicalEvent from "../components/manage/event/UpdatePhysicalEvent";
 
 export default function ManageEvents() {
   const [endPoint, setEndpoint] = useState("physical");
@@ -36,10 +39,11 @@ export default function ManageEvents() {
           </ul>
 
           <div className="manage-events-dashboard">
+            {endPoint === "physical" && <CreatePhsyicalEvent />}
+            {endPoint === "online" && <CreateOnlineEvent />}
+            {endPoint === "update-online" && <UpdateOnlineEvent />}
+            {endPoint === "update-physical" && <UpdatePhysicalEvent />}
 
-            {endPoint === "online" && (
-              <CreateOnlineEvent/>
-            )}
           </div>
         </div>
       </section>
