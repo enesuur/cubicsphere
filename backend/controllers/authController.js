@@ -17,11 +17,11 @@ async function register(req, res) {
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       )
     ) {
-      res.status(400).json({ message: "Please provide a valid email address." });
+      return res.status(400).json({ message: "Please provide a valid email address." });
     }
 
     if (username.length < 1 || username.length > 32) {
-      res.status(400).json({ message: "Username must be between 1 and 32 characters in length." });
+      return res.status(400).json({ message: "Username must be between 1 and 32 characters in length." });
     }
 
     if (password.length < 6 || password.length > 512) {
@@ -29,21 +29,21 @@ async function register(req, res) {
     }
 
     if (name.length < 1 || name.length > 512) {
-      res.status(400).json({ message: "Name must be between 1 and 32 characters in length." });
+      return res.status(400).json({ message: "Name must be between 1 and 32 characters in length." });
     }
 
     if (lastname.length < 1 || lastname.length > 512) {
-      res.status(400).json({ message: "Last name must be between 1 and 32 characters in length." });
+      return res.status(400).json({ message: "Last name must be between 1 and 32 characters in length." });
     }
 
     const emailExists = await User.findOne({ email });
     if (emailExists) {
-      res.status(409).json({ message: "The email address is already in use." });
+      return res.status(409).json({ message: "The email address is already in use." });
     }
 
     const usernameExists = await User.findOne({ username });
     if (usernameExists) {
-      res.status(409).json({ message: "The username is already in use." });
+      return res.status(409).json({ message: "The username is already in use." });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -54,10 +54,10 @@ async function register(req, res) {
       email: email,
       name: name,
       lastname: lastname,
-      phoneNumber:"XXX-XXX-XXXX",
-      profileImgUrl:"./uplodas/dummyAvatar.jpeg",
-      birthday: new Date('1990-01-01'),
-      biography: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      phoneNumber: "XXX-XXX-XXXX",
+      profileImgUrl: "./uplodas/dummyAvatar.jpeg",
+      birthday: new Date("1990-01-01"),
+      biography: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     });
 
     const token = jwt.sign(
@@ -67,7 +67,7 @@ async function register(req, res) {
       SECRET_KEY
     );
 
-    res
+    return res
       .cookie("token", token, { httpOnly: true, maxAge: 365 * 24 * 60 * 60 * 1000 })
       .json({ message: "User was registered successfully!" });
   } catch (error) {
@@ -99,7 +99,9 @@ async function login(req, res) {
             },
             SECRET_KEY
           );
-          res.cookie("token", token, { httpOnly: true, maxAge: 365 * 24 * 60 * 60 * 1000 }).json({message: "You succesfully logged in."});
+          res
+            .cookie("token", token, { httpOnly: true, maxAge: 365 * 24 * 60 * 60 * 1000 })
+            .json({ message: "You succesfully logged in." });
         } else {
           res.status(400).json({ message: "Your password is mismatched!" });
         }
@@ -112,7 +114,7 @@ async function login(req, res) {
 }
 
 function logout(req, res) {
-  res.cookie("token", "", {httpOnly: true, maxAge: 1}).json({ message: "You succesfully logged out!"});
+  res.cookie("token", "", { httpOnly: true, maxAge: 1 }).json({ message: "You succesfully logged out!" });
 }
 module.exports = {
   register,

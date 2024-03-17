@@ -34,6 +34,21 @@
     background-color: var(--primary-darker-color);
   }
 
+  .navigation .nav-items li:nth-child(5) {
+    cursor: pointer;
+    color: var(--font-secondary-color);
+    padding: 8px 12px;
+    border: 1px solid var(--dark-color)k;
+    border-radius: 4px;
+    font-weight: 400;
+    background-color: var(--primary-color);
+    transition: background-color 0.3s;
+  }
+  
+  .navigation .nav-items li:nth-child(5):hover {
+    background-color: var(--primary-darker-color);
+  }
+
   .hamburger-menu {
     display: none;
   }

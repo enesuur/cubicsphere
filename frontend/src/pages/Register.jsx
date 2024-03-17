@@ -1,6 +1,8 @@
-import { useState } from "react";
-import "./Register.css";
+import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import "./Register.css";
+import AuthContext from "../context/AuthContext";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -14,6 +16,7 @@ export default function Register() {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertColor, setAlertColor] = useState("");
   const navigate = useNavigate();
+  const authContext = useContext(AuthContext);
   function handleFormChange(e) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,7 +24,6 @@ export default function Register() {
       [name]: value,
     }));
   }
-
 
   function handleFormSubmit(event) {
     event.preventDefault();
@@ -87,13 +89,18 @@ export default function Register() {
         email,
         password,
       }),
-    })
-      .then((data) => {
+      credentials: "include",
+    }) 
+      .then(async (data) => {
         console.log("Registration successful:", data);
-        navigate("/events");
+        const result = await data.json();
+        setAlertMessage(result.message);
+        authContext.setIsAuthConfirmed(true);
+        navigate("/events")
       })
       .catch((error) => {
         console.error("Registration failed:", error.message);
+        setAlertMessage(error.message);
       });
   }
 
