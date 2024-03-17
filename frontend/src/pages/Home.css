@@ -101,20 +101,12 @@ section .memberships-header {
 
 @media only screen and (max-width: 768px) {
   section .features .card-container {
-    row-gap: 128px;
-  }
-  section .features .card-container .card-item article h2 {
-    margin: 16px 0 16px 0;
-    font-size: 1.5rem;
+    row-gap: 64px;
   }
 
-  section .features .card-container .card-item article p {
-    font-size: 0.92rem;
-  }
   section .features .card-container .card-item {
     flex-direction: column;
-    height: 100vh;
-    padding: 32px;
+    height: auto;
     row-gap: 24px;
   }
 
@@ -123,19 +115,57 @@ section .memberships-header {
     flex-direction: column-reverse;
   }
 
-  section.memberships-header {
-    font-size: 1.8rem;
-    margin: 32px 0;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  section.membership-plans {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  }
-
-  section.memberships-header {
+  section .features .card-container .card-item article h2 {
     font-size: 1.5rem;
     margin: 16px 0;
   }
+
+  section .features .card-container .card-item article p {
+    font-size: 0.92rem;
+  }
+
+  section .memberships-header {
+    font-size: 1.8rem;
+    margin: 32px 0;
+  }
+
+  section .membership-plans {
+    padding: 24px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 48px;
+  }
 }
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+  section .features .card-container {
+    row-gap: 108px;
+  }
+
+  section .features .card-container .card-item {
+    flex-direction: row;
+    height: auto;
+    column-gap: 24px;
+    padding: 24px;
+  }
+
+  section .features .card-container .card-item article h2 {
+    font-size: 1.8rem;
+    margin: 0;
+  }
+
+  section .features .card-container .card-item article p {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  section .memberships-header {
+    font-size: 2rem;
+    margin: 48px 0;
+  }
+
+  section .membership-plans {
+    gap: 48px;
+    grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
+  }
+}
+

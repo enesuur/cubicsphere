@@ -13,16 +13,16 @@ footer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    row-gap: 48px;
+    row-gap: 36px;
     justify-content: space-between;
   }
   
   footer nav .site-navigation {
     display: flex;
-    flex-direction: column;
-    row-gap: 16px;
+    column-gap: 24px;
+    align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.92rem;
   }
   
   footer nav .site-navigation li {
@@ -54,7 +54,8 @@ footer {
   }
   
   .footer-title {
-    font-size: 1.5rem; 
+    font-size: 1.5rem;
+    letter-spacing: 1px;
   }
   
   .footer-subtitle {
@@ -85,6 +86,7 @@ footer {
   @media screen and (max-width: 768px) {
     footer nav {
       flex-direction: column;
+      align-items: center;
       row-gap: 32px; 
     }
   
@@ -95,10 +97,25 @@ footer {
       align-items: center;
       width: 100%;
     }
+
+    footer nav .site-navigation {
+      row-gap: 24px;
+    }
   
     footer nav div:first-child {
       margin-bottom: 24px;
       align-items: center;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+    }
+
+    .footer-subtitle {
+      font-size: 0.825rem;
+    }
+    footer nav .social-links-wrapper h2 {
+      font-size: 0.92rem;
     }
   }
   

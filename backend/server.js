@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const routes = require("./routes/routes");
 const { handleSpam, authVerify} = require("./middlewares/authMiddleware");
 require("dotenv").config();
@@ -17,6 +18,10 @@ mongoose
   .catch((err) => console.error("There is an error occured while connectin to the MongoDB:\n", err));
 
 /* Middlewares */
+app.use(cors({
+  origin: ['http://127.0.0.1:5173'],
+  credentials: true
+}));
 app.use(express.json());
 app.use("/", routes);
 app.use("/register",handleSpam);

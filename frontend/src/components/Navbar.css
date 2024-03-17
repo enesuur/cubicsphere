@@ -1,37 +1,36 @@
-nav {
-    font-family: "Raleway",sans-serif;
+.navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
     column-gap: 16px;
-    min-height: 72px;
     z-index: 999;
 }
 
-nav .nav-header{
+.navigation .nav-header{
     font-weight: 300;
     font-size: 1.25rem;
 }
 
-nav .nav-items {
+.navigation .nav-items {
     display: flex;
+    font-size: 0.99rem;
     justify-content: center;
     align-items: center;
-    column-gap: 24px; 
+    column-gap: 16px; 
 }
 
-nav .nav-items li:nth-child(2) {
+.navigation .nav-items li:nth-child(2) {
     cursor: pointer;
     color: var(--font-secondary-color);
     padding: 8px 12px;
-    border: 1px solid black;
+    border: 1px solid var(--dark-color)k;
     border-radius: 4px;
     font-weight: 400;
     background-color: var(--primary-color);
     transition: background-color 0.3s;
   }
   
-  nav .nav-items li:nth-child(2):hover {
+  .navigation .nav-items li:nth-child(2):hover {
     background-color: var(--primary-darker-color);
   }
 
@@ -40,13 +39,8 @@ nav .nav-items li:nth-child(2) {
   }
 
   @media screen and (max-width: 768px) {
-    nav {
-      flex-direction: column;
-      align-items: center;
-      row-gap: 24px;
-    }
 
-    nav .nav-header {
+    .navigation .nav-header {
       width: 100%;
       padding: 16px;
       display: flex;
@@ -55,6 +49,7 @@ nav .nav-items li:nth-child(2) {
     }
 
     .hamburger-menu {
+      cursor: pointer;
       display: block;
     }
 
@@ -64,13 +59,24 @@ nav .nav-items li:nth-child(2) {
       height: 24px;
     }
 
-    nav .nav-items {
-      width: 100%;
+    .navigation .nav-items {
+      width: 100vw;
+      position: absolute;
+      top: 95px;
+      left: 0;
+      background-color: var(--white);
+      background-image: radial-gradient(
+        60% 120% at 50% 50%,
+        hsla(0, 0%, 100%, 0) 0,
+        rgba(252, 205, 238, 0.5) 100%
+      );
+      box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0.2);
       flex-direction: column;
+      row-gap: 24px;
       padding: 16px;
     }
-  
-    nav .nav-items li:nth-child(2) {
-      margin-top: 8px;
+
+    .navigation .nav-items li:nth-child(2) {
+      padding: 0;
     }
   }

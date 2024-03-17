@@ -3,7 +3,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const Event = require("../models/eventModel");
 const User = require("../models/userModel");
 
-async function createPhysicalEvent(req, res, next) {
+async function createPhysicalEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, address, city, state, country, category } = req.body;
     if (
@@ -20,7 +20,7 @@ async function createPhysicalEvent(req, res, next) {
     ) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-
+p
     const slug = slugify(`${title}-${Math.random().toString(36).substring(7)}`, {
       lower: true,
       strict: true,
@@ -61,7 +61,7 @@ async function createPhysicalEvent(req, res, next) {
   }
 }
 
-async function createOnlineEvent(req, res, next) {
+async function createOnlineEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, category } = req.body;
 
@@ -103,7 +103,7 @@ async function createOnlineEvent(req, res, next) {
   }
 }
 
-async function updatePhysicalEvent(req, res, next) {
+async function updatePhysicalEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, address, city, state, country, category, eventId } =
       req.body;
@@ -160,7 +160,7 @@ async function updatePhysicalEvent(req, res, next) {
   }
 }
 
-async function updateOnlineEvent(req, res, next) {
+async function updateOnlineEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, category, eventId } = req.body;
     if (!title || !description || !startDate || !dueDate || !quota || !category || !eventId) {
@@ -227,7 +227,7 @@ async function deleteEvent(req, res) {
   }
 }
 
-async function getEvent(req, res, next) {
+async function getEvent(req, res) {
   try {
     const { slug } = req.body;
     const event = await Event.findOne({ slug });
@@ -241,11 +241,95 @@ async function getEvent(req, res, next) {
   }
 }
 
+async function getFeaturedEvents(req, res) {
+  try {
+
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+/* returns array that contain list of event object corresponding to category selection.
+*/ 
+async function getEventsByCategory(req,res){
+  try {
+    if(!req.query.category){
+      return res.status(400).json( { message: "Fill all the fields."})
+    }
+
+    const events = await Event.find({ category: req.query.category })
+    if(events.length === 0){
+      return res.status(404).json({ message: "No events."})
+    }
+    return res.status(200).json({ message: events});
+    
+  }catch(error){
+    console.log(error,error.message);
+    return res.status(500).json({ message: "Internal server error."})
+  }
+}
+
+async function getEventsByLocation(req,res){
+  try {
+    const { address,city,state,country} = req.query;
+    // 
+  }catch(error){
+    console.log(error,error.message);
+    return res.status(500).json({ message: "Internal server error."})
+  }
+}
+
+async function getFilteredEvents(req,res){
+  try{
+    const { address, city,state,country, isOnline,quota, category} = req.query;
+    if(address || city || state || country ||isOnline || quota || category ){
+      const filter = {};
+      if(address){
+        filter.address = address;
+      }
+      if(city){
+        filter.city = city;
+      }
+      if(state){
+        filter.state = state;
+      }
+      if(country){
+        filter.country = country;
+      }
+      if(isOnline){
+        filter.isOnline = isOnline === "true";
+      }
+      if(quota){
+        filter.quota = parseInt(quota);
+      }
+      if(category){
+        filter.category = category;
+      }
+
+      if(Object.keys(filter).length > 0){
+        const events = await Event.find(filter);
+        if(events.length === 0){
+          res.status(404).json({ message: "No events to show."})
+        }
+        return res.status(200).json({ events: events});
+      }
+
+    }
+    return res.status(400).json({ message: "No filter option provided." });
+  }catch(error){
+    console.log(error,error.message);
+    return res.status(500).json({ message: "Internal server error."})
+  }
+}
+
 module.exports = {
   createPhysicalEvent,
   createOnlineEvent,
   updatePhysicalEvent,
   updateOnlineEvent,
   getEvent,
+  getEventsByCategory,
+  getFilteredEvents,
   deleteEvent
 };

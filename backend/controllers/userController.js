@@ -1,13 +1,10 @@
+const ObjectId = require("mongoose").Types.ObjectId;
 const bcrypt = require("bcrypt");
-const { uploadImg } = require("../middlewares/multerMiddleware");
-const path = require("path")
+const path = require("path");
 const User = require("../models/userModel");
 
-async function updateUser(req, res, next) {
+async function updateUser(req, res) {
   try {
-    if (!res.locals.user) {
-      return res.status(401).json({ message: "Unauthorized." });
-    }
     if (!req.body || !req.body.phoneNumber || !req.body.name || !req.body.lastname) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
@@ -30,11 +27,8 @@ async function updateUser(req, res, next) {
   }
 }
 
-async function updateResidency(req, res, next) {
+async function updateResidency(req, res) {
   try {
-    if (!res.locals.user) {
-      return res.status(401).json({ message: "Unauthorized." });
-    }
     if (!req.body || !req.body.country || !req.body.city) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
@@ -44,7 +38,7 @@ async function updateResidency(req, res, next) {
       { "residency.country": country, "residency.city": city },
       { new: true }
     );
-    console.log(updatedUser);
+
     if (!updatedUser) {
       return res.status(400).json({ message: "User not found." });
     }
@@ -56,7 +50,7 @@ async function updateResidency(req, res, next) {
   }
 }
 
-async function getUser(req, res, next) {
+async function getUser(req, res) {
   try {
     if (!req.params.username) {
       return res.status(404).json({ message: "User not found." });
@@ -83,13 +77,10 @@ async function getUser(req, res, next) {
   }
 }
 
-async function updatePassword(req, res, next) {
+async function updatePassword(req, res) {
   try {
     if (!req.body || !req.body.newPassword || !req.body.verifyNewPassword) {
       return res.status(400).json({ message: "Fill all the fields." });
-    }
-    if (!res.locals.user) {
-      return res.status(401).json({ message: "Unauthorized." });
     }
     const { newPassword, verifyNewPassword } = req.body;
     if (newPassword !== verifyNewPassword) {
@@ -111,11 +102,8 @@ async function updatePassword(req, res, next) {
   }
 }
 
-async function updateAvatar(req, res, next) {
+async function updateAvatar(req, res) {
   try {
-    if (!res.locals.user) {
-      return res.status(401).json({ message: "Unauthorized." });
-    }
     if (!req.file) {
       return res.status(400).json({ message: "There is no file updated." });
     }
@@ -153,16 +141,13 @@ async function getUserAvatar(req, res) {
 
     return res.status(200).sendFile(path.resolve(user.profileImgUrl));
   } catch (error) {
-    console.error(error,error.message);
+    console.error(error, error.message);
     return res.status(500).json({ message: "Internal server error." });
   }
 }
 
-async function updateBiography(req, res, next) {
+async function updateBiography(req, res) {
   try {
-    if (!res.locals.user) {
-      return res.status(401).json({ message: "Unauthorized." });
-    }
     if (!req.body || !req.body.biography) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
@@ -182,6 +167,20 @@ async function updateBiography(req, res, next) {
   }
 }
 
+async function deleteUser(req, res) {
+  try {
+    const result = await User.deleteOne({ _id: new ObjectId(res.locals.user._id) });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    return res.status(201).json({ message: "User has been deleted succesfully." });
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+}
+
 module.exports = {
   getUser,
   getUserAvatar,
@@ -189,5 +188,6 @@ module.exports = {
   updatePassword,
   updateAvatar,
   updateResidency,
-  updateBiography
+  updateBiography,
+  deleteUser
 };

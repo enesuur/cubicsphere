@@ -22,7 +22,7 @@
 }
 
 .price-card article h2 {
-    margin: 8px 0 8px 0;
+  margin: 8px 0 8px 0;
   font-size: 1.5rem;
   text-align: center;
   font-weight: 300;
@@ -79,14 +79,13 @@ price-card .btn-pricing:hover {
 }
 
 @media only screen and (max-width: 768px) {
-    .price-card {
-        row-gap: 0;
-    }
-
-    .price-card article p {
-        padding: 8px;
-        width: 250px;
-        margin: auto;
-    }
+  .price-card {
+    row-gap: 0;
   }
-  
+
+  .price-card article p {
+    padding: 4px;
+    width: 200px;
+    margin: auto;
+  }
+}
