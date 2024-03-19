@@ -13,7 +13,7 @@ export default function Register() {
     password: "123123123",
     confirmPassword: "123123123",
   });
-  const [alertMessage, setAlertMessage] = useState("");
+  const [message, setMessage] = useState("");
   const [alertColor, setAlertColor] = useState("");
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
@@ -39,13 +39,13 @@ export default function Register() {
       !confirmPassword
     ) {
       console.log("Fill all the fields.");
-      setAlertMessage("Fill all the fields.");
+      setMessage("Fill all the fields.");
       return;
     }
 
     if (password !== confirmPassword) {
       console.log("Password mismatched!");
-      setAlertMessage("Password mismatched!");
+      setMessage("Password mismatched!");
       return;
     }
 
@@ -53,7 +53,7 @@ export default function Register() {
       console.log(
         "Username, name, or lastname cannot be empty or contain spaces."
       );
-      setAlertMessage(
+      setMessage(
         "Username, name, or lastname cannot be empty or contain spaces."
       );
       return;
@@ -61,7 +61,7 @@ export default function Register() {
 
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       console.log("Please enter a valid email address.");
-      setAlertMessage("Please enter a valid email address.");
+      setMessage("Please enter a valid email address.");
       return;
     }
 
@@ -69,12 +69,12 @@ export default function Register() {
       console.log(
         "Password must be at least 6 characters long and cannot contain empty spaces."
       );
-      setAlertMessage(
+      setMessage(
         "Password must be at least 6 characters length and cannot contain empty spaces."
       );
       return;
     }
-    setAlertMessage("Please, wait for a while..");
+    setMessage("Please, wait for a while..");
     setAlertColor("green");
 
     fetch("http://127.0.0.1:5000/register", {
@@ -94,13 +94,13 @@ export default function Register() {
       .then(async (data) => {
         console.log("Registration successful:", data);
         const result = await data.json();
-        setAlertMessage(result.message);
-        authContext.setIsAuthConfirmed(true);
+        setMessage(result.message);
+        authContext.setUser(result.user);
         navigate("/events")
       })
       .catch((error) => {
         console.error("Registration failed:", error.message);
-        setAlertMessage(error.message);
+        setMessage(error.message);
       });
   }
 
@@ -174,8 +174,8 @@ export default function Register() {
               onChange={handleFormChange}
             />
           </label>
-          <span className="alert-msg" style={{ color: alertColor }}>
-            {alertMessage}
+          <span className="register-message" style={{ color: alertColor }}>
+            {message}
           </span>
           <button type="submit">Register</button>
           <hr />

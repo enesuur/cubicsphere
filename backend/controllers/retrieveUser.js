@@ -1,7 +1,8 @@
 async function retrieveUser(req, res) {
   try {
     const {username,name,lastname,profileImg,residency,role,birthday} = res.locals.user;
-    return res.status(200).json({
+    console.log();
+    return res.status(200).send({
       user: {
         username,
         name,
@@ -12,6 +13,7 @@ async function retrieveUser(req, res) {
         birthday
       }
     });
+    
   } catch (error) {
     console.log(error, error.message);
     console.log("Something went wrong on retrieving user.");

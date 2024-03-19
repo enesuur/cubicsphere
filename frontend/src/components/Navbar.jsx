@@ -24,6 +24,10 @@ export default function Navbar() {
     };
   }, []);
 
+  useEffect(() => {
+    
+  }, [authContext.user]);
+
   function handleMenuClick() {
     setOpenMenu(!openMenu);
   }
@@ -48,8 +52,8 @@ export default function Navbar() {
     .finally(() => {
       setOpenMenu(!openMenu);
     });
-    authContext.setIsAuthConfirmed(false);
-    useNavigate("/")
+    authContext.setUser(null);
+    navigate("/")
   }
 
   return (
@@ -65,7 +69,7 @@ export default function Navbar() {
           className="nav-items"
           style={{ display: openMenu || windowWidth > 768 ? "flex" : "none" }}
         >
-          {!authContext.isAuthConfirmed && (
+          {!authContext.user && (
             <>
               <li>
                 <NavLink to={"/login"} onClick={handleMenuClick}>Login</NavLink>
@@ -75,8 +79,9 @@ export default function Navbar() {
               </li>
             </>
           )}
+          { console.log(authContext.user)}
 
-          {authContext.isAuthConfirmed && (
+          {authContext.user && (
             <>
               <li>
                 <NavLink to={"/events"} onClick={handleMenuClick} >Events</NavLink>

@@ -31,7 +31,7 @@ route.post("/register", register);
 route.post("/login", login);
 route.get("/logout", logout);
 route.get("/user/:username", getUser);
-route.get("/user/retrieve-user", checkUser,retrieveUser);
+route.get("/retrieve-user", checkUser,retrieveUser);
 route.get("/user/:username/avatar", getUserAvatar);
 route.patch("/user/:username/update-password", checkUser, updatePassword);
 route.patch("/user/:username/update-avatar", [checkUser,uploadImg.single("avatar"),processImage], updateAvatar);

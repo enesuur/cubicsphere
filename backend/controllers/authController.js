@@ -68,8 +68,22 @@ async function register(req, res) {
     );
 
     return res
+      .status(201)
       .cookie("token", token, { httpOnly: true, maxAge: 365 * 24 * 60 * 60 * 1000 })
-      .json({ message: "User was registered successfully!" });
+      .json({
+        message: "User was registered successfully!",
+        user: {
+          username: user.username,
+          name: user.name,
+          lastname: user.lastname,
+          email: user.email,
+          birthday: user.birthday,
+          biography: user.biography,
+          role: user.role,
+          events: user.events,
+          profileImgUrl: user.profileImgUrl
+        }
+      });
   } catch (error) {
     console.error("Error in registering user:", error);
     res.status(500).json({ message: "Internal server error." });
@@ -100,11 +114,25 @@ async function login(req, res) {
             SECRET_KEY
           );
           res
+            .status(200)
             .cookie("token", token, { httpOnly: true, maxAge: 365 * 24 * 60 * 60 * 1000 })
-            .json({ message: "You succesfully logged in." });
-        } else {
-          res.status(400).json({ message: "Your password is mismatched!" });
+            .json({
+              message: "You succesfully logged in.",
+              user: {
+                username: user.username,
+                name: user.name,
+                lastname: user.lastname,
+                email: user.email,
+                birthday: user.birthday,
+                biography: user.biography,
+                role: user.role,
+                events: user.events,
+                profileImgUrl: user.profileImgUrl
+              }
+            });
         }
+      } else {
+        res.status(400).json({ message: "Your email or password is incorrect." });
       }
     }
   } catch (error) {

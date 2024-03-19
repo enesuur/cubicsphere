@@ -3,12 +3,11 @@ import { createContext, useEffect, useState } from "react";
 const AuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
-    const [isAuthConfirmed, setIsAuthConfirmed] = useState(false);
-
+    const [user, setUser] = useState(null);
     useEffect(() => {
         async function retrieveUser(){
             try {
-                const response = await fetch("http://127.0.0.1:5000/user/retrieve-user", {
+                const response = await fetch("http://127.0.0.1:5000/retrieve-user", {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -16,16 +15,15 @@ export function AuthContextProvider({ children }) {
                     credentials: "include",
                 });
                 const data = await response.json();
-                console.log(data)
-                if(data.message === "User not found."){
-                    setIsAuthConfirmed(false);
+                console.log(response)
+                if(response.status === 400 || response.status === 401 || response.status === 404  ){
+                    setUser(null);
                 }else{
-                    setIsAuthConfirmed(true);
+                    setUser(data.user);
                 }
-               
             } catch (error) {
                 console.error("Error while retrieving user data:", error.message);
-                setIsAuthConfirmed(false);
+                setUser(null);
             }
         };
         retrieveUser();
@@ -34,8 +32,8 @@ export function AuthContextProvider({ children }) {
     return (
         <AuthContext.Provider 
         value={{ 
-            isAuthConfirmed, 
-            setIsAuthConfirmed,
+            user, 
+            setUser,
              }}>
             {children}
         </AuthContext.Provider>
