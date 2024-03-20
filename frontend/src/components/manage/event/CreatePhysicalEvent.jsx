@@ -66,7 +66,7 @@ export default function CreatePhsyicalEvent() {
           required
         />
       </label>
-      <label htmlFor="description">
+      <label htmlFor="description" className="editor">
         Event Description
         <ReactQuill
           theme="snow"

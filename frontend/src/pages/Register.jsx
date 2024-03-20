@@ -14,7 +14,6 @@ export default function Register() {
     confirmPassword: "123123123",
   });
   const [message, setMessage] = useState("");
-  const [alertColor, setAlertColor] = useState("");
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
   function handleFormChange(e) {
@@ -74,8 +73,6 @@ export default function Register() {
       );
       return;
     }
-    setMessage("Please, wait for a while..");
-    setAlertColor("green");
 
     fetch("http://127.0.0.1:5000/register", {
       method: "POST",
@@ -91,17 +88,17 @@ export default function Register() {
       }),
       credentials: "include",
     }) 
-      .then(async (data) => {
-        console.log("Registration successful:", data);
-        const result = await data.json();
-        setMessage(result.message);
-        authContext.setUser(result.user);
-        navigate("/events")
-      })
-      .catch((error) => {
-        console.error("Registration failed:", error.message);
-        setMessage(error.message);
-      });
+    .then(async (response) => {
+      const data = await response.json();
+      if (data.user) {
+        authContext.setUser(data.user);
+        setMessage(data.message);
+        navigate("/events");
+      } else {
+        authContext.setUser(null);
+        setMessage(data.message);
+      }
+    })
   }
 
   return (
@@ -174,7 +171,7 @@ export default function Register() {
               onChange={handleFormChange}
             />
           </label>
-          <span className="register-message" style={{ color: alertColor }}>
+          <span className="register-message">
             {message}
           </span>
           <button type="submit">Register</button>

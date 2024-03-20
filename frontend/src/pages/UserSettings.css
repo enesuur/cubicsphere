@@ -1,117 +1,167 @@
 section .user-settings-header {
+  font-family: "Inter",sans-serif;
   flex-basis: 100%;
-  padding: 12px 0;
-  border-radius: 4px;
+  margin: 12px 0 12px 0;
   font-size: 1.25rem;
-  font-weight: 300;
+  font-weight: 200;
 }
 
 section .user-settings {
   font-family: "Raleway", sans-serif;
   display: flex;
-  column-gap: 32px;
+  column-gap: 48px;
   border-radius: 4px;
 }
 
-section .user-settings ul {
+section .user-settings .user-navigation {
   display: flex;
+  flex-basis: 20%;
   flex-direction: column;
   row-gap: 32px;
 }
 
-section .user-settings ul {
+section .user-settings .user-navigation {
   display: flex;
   flex-direction: column;
   row-gap: 16px;
+  max-height: 500px;
+
 }
 
-section .user-settings ul li {
+section .user-settings .user-navigation li {
   cursor: pointer;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
   padding: 12px 16px;
   text-align: center;
   border-radius: 4px;
   transition: box-shadow 0.1s ease-in-out;
 }
 
-section .user-settings ul li:hover {
-  box-shadow: 0px 0px 10px 0px rgba(183, 28, 28, 0.3);
-
+section .user-settings .user-navigation li:hover {
+  box-shadow: var(--box-shadow-hover);
 }
 
-section .user-settings-dashboard{
-    display: flex;
-    flex-grow: 1;
-    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-    justify-content: center;
-    border-radius: 4px;
-  }
+section .user-settings-dashboard {
+  display: flex;
+  flex: 1;
+  box-shadow: var(--box-shadow);
+  justify-content: center;
+  border-radius: 4px;
+  padding: 32px;
+}
 
-  section .user-settings-dashboard h2:first-child{
-    font-size: 1.75rem;
-    margin-top: 12px;
-    font-weight: 200;
-    color: var(--primary-darker-color);
-  }
-  
+section .user-settings-dashboard h2:first-child {
+  font-family: "Inter",sans-serif;
+  font-size: 1.5rem;
+  margin-top: 12px;
+  font-weight: 200;
+  color: var(--primary-darker-color);
+}
 
-section .user-settings-dashboard form{
-    flex-basis: 40%;
-    display: flex;
-    row-gap: 24px;
-    align-items: center;
-    flex-direction: column;
-    padding: 12px 16px;
+section .user-settings-dashboard form {
+  flex-basis: 75%;
+  display: flex;
+  row-gap: 24px;
+  align-items: center;
+  flex-direction: column;
+  padding: 12px 16px;
 }
 
 section .user-settings-dashboard form label {
-    width: 100%;
-    display: block;
-    color: var(--gray-color);
-    display: flex;
-    flex-direction: column;
-    row-gap: 4px;
-  }
+  font-family: "Raleway", sans-serif;
+  width: 100%;
+  display: block;
+  color: var(--gray-color);
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
 
 section form input[type="text"],
 section form input[type="email"],
 section form input[type="password"],
 section form input[type="tel"] {
+  font-family: "Manrope",sans-serif;
   width: 100%;
   border-radius: 4px;
   padding: 12px 16px;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-  transition: box-shadow 0.3s ease; 
+  box-shadow: var(--box-shadow);
+  color: var(--gray-color);
+  transition: box-shadow 0.3s ease;
 }
 
 section form input[type="text"]:focus,
 section form input[type="email"]:focus,
-section form input[type="password"]:focus {
-  box-shadow: 0px 0px 10px 0px rgba(183, 28, 28, 0.2); 
+section form input[type="password"]:focus,
+section form input[type="tel"] {
+  box-shadow: var(--box-shadow-hover);
 }
 
 section .user-settings-dashboard form h2:first-child {
-    text-align: center;
+  text-align: center;
+}
+
+section
+.user-settings
+.user-settings-dashboard
+  form
+  label
+  .quill
+  .ql-snow
+  .ql-editor {
+  min-height: 256px;
+  max-height: 1024px;
 }
 
 section .user-settings-dashboard form button {
-    background-color: var(--primary-color);
-    cursor: pointer;
-    border-radius: 4px;
-    color: var(--white);
-    padding: 12px 16px;
-    transition: background-color 0.3s ease; 
-    text-align: center;
-    width: 100%;
-    display: block;
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
-  
-  section .user-settings-dashboard form button:hover {
-    background-color: var(--primary-darker-color);
-  }
+  background-color: var(--primary-color);
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--white);
+  padding: 12px 16px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  width: 100%;
+  display: block;
+  margin-top: 32px;
+  font-weight: 300;
+}
 
+section .user-settings-dashboard form button:hover {
+  background-color: var(--primary-darker-color);
+}
+
+.editor {
+  min-height: 256px;
+  max-height: 1024px;
+  margin: 36px 0 36px 0;
+}
+
+.delete-information ul {
+  display: inline;
+  width: max-content;
+  justify-content: center;
+}
+
+.delete-information {
+  display: flex;
+  align-items: center;
+}
+
+.delete-information h3:first-child{
+  font-family: "Manrope",sans-serif;
+  text-align: center;
+  margin: 12px 0 12px 0;
+  font-size: 0.92rem;
+}
+
+.delete-warning {
+  font-family: "Manrope",sans-serif;
+  font-size: 0.825rem;
+  color: var(--primary-darker-color);
+  font-weight: 300;
+  text-align: center;
+}
 
 /* Responsive design */
 @media (max-width: 768px) {

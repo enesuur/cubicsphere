@@ -173,7 +173,7 @@ async function deleteUser(req, res) {
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: "User not found." });
     }
-
+    res.cookie("token", "", { httpOnly: true, maxAge: 1 });
     return res.status(201).json({ message: "User has been deleted succesfully." });
   } catch (error) {
     console.log(error, error.message);

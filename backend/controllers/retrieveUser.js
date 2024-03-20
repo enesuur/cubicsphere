@@ -1,16 +1,19 @@
 async function retrieveUser(req, res) {
   try {
-    const {username,name,lastname,profileImg,residency,role,birthday} = res.locals.user;
+    const {username,name,lastname,email,residency,role,birthday,biography,events,profileImgUrl} = res.locals.user;
     console.log();
     return res.status(200).send({
       user: {
         username,
         name,
         lastname,
-        profileImg,
+        email,
+        birthday,
         residency,
+        biography,
         role,
-        birthday
+        events,
+        profileImgUrl
       }
     });
     
