@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../../../context/AuthContext";
 
 export default function UpdatePassword() {
   const [formData, setFormData] = useState({
-    password: "",
-    confirmPassword: "",
+    newPassword: "",
+    verifyNewPassword: "",
   });
-
+  const [message,setMessage] = useState("");
+  const { user } = useContext(AuthContext);
   function handleInputChange(e) {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -16,18 +18,48 @@ export default function UpdatePassword() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
+    console.log(user.username)
+    fetch(`http://127.0.0.1:5000/user/${user.username}/update-password`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        newPassword:formData.newPassword,
+        verifyNewPassword:formData.verifyNewPassword
+      }),
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 201) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+          user.residency = formData;
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log(error.message);
+        setMessage(error.message);
+      });
   }
   return (
     <form onSubmit={handleFormSubmit}>
       <h2>Update Password</h2>
-      <label htmlFor="name">
+      <label htmlFor="password">
         Password
         <input
           type="password"
           placeholder="Password"
           id="password"
-          name="password"
-          value={formData.name}
+          name="newPassword"
+          value={formData.newPassword}
           onChange={handleInputChange}
         />
       </label>
@@ -36,14 +68,14 @@ export default function UpdatePassword() {
         <input
           type="password"
           placeholder="Confirm Password"
-          name="confirmPassword"
-          id="confirmPassword"
-          value={formData.confirmPassword}
+          name="verifyNewPassword"
+          id="verifyNewPassword"
+          value={formData.verifyNewPassword}
           onChange={handleInputChange}
         />
       </label>
-
-      <button type="submit">Update</button>
+      <span>{message}</span>
+      <button type="submit">Update Password</button>
     </form>
   );
 }

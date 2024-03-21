@@ -11,7 +11,7 @@ async function processImage(req, res, next) {
 
     const processedImageBuffer = await sharp(req.file.buffer)
       .resize({ width: 1024, height: 768 })
-      .jpeg({ quality: 10 })
+      .jpeg({ quality: 80 })
       .toBuffer();
 
     const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1e9);

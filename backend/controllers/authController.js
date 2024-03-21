@@ -55,7 +55,7 @@ async function register(req, res) {
       name: name,
       lastname: lastname,
       phoneNumber: "XXX-XXX-XXXX",
-      profileImgUrl: "./uplodas/dummyAvatar.jpeg",
+      profileImgUrl: "./uploads/dummyAvatar.jpeg",
       birthday: new Date("1990-01-01"),
       biography: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     });
@@ -92,6 +92,7 @@ async function register(req, res) {
 
 async function login(req, res) {
   const { email, password, username } = req.body;
+  console.log(1)
   try {
     if (!(email || username) || !password) {
       return res.status(400).json({ message: "Fill all fields." });
@@ -103,9 +104,10 @@ async function login(req, res) {
       } else if (username) {
         user = await User.findOne({ username });
       }
-
+  
       if (user) {
         const isPasswordValid = await bcrypt.compare(password, user.password);
+        
         if (isPasswordValid) {
           const token = jwt.sign(
             {
@@ -130,6 +132,8 @@ async function login(req, res) {
                 profileImgUrl: user.profileImgUrl
               }
             });
+        }else{
+          res.status(400).json({message: "Incorrect Password"});
         }
       } else {
         res.status(400).json({ message: "Your email or password is incorrect." });

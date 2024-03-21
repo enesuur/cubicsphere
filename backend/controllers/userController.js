@@ -8,12 +8,13 @@ async function updateUser(req, res) {
     if (!req.body || !req.body.phoneNumber || !req.body.name || !req.body.lastname) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-    const { phoneNumber, name, lastname } = req.body;
+    const { phoneNumber, name, lastname,biography } = req.body;
     const user = await User.findByIdAndUpdate(
       res.locals.user._id,
       { phoneNumber: phoneNumber },
       { name: name },
       { lastname: lastname },
+      { biography: biography},
       { new: true }
     );
     if (!user) {
@@ -40,7 +41,7 @@ async function updateResidency(req, res) {
     );
 
     if (!updatedUser) {
-      return res.status(400).json({ message: "User not found." });
+      return res.status(404).json({ message: "User not found." });
     }
     return res.status(201).json({ message: "Residency updated succesfully!" });
   } catch (error) {
@@ -115,7 +116,7 @@ async function updateAvatar(req, res) {
     if (!updatedUser) {
       return res.status(400).json({ message: "User not found." });
     }
-    return res.status(201).json({ message: "Profile photo was updated succesfully." });
+    return res.status(201).json({ message: "Profile photo was updated succesfully.",profileImgUrl:updatedUser.profileImgUrl} );
   } catch (error) {
     console.error(error, error.message);
     console.log("Something went wrong on updateProfileImg()");
@@ -125,6 +126,7 @@ async function updateAvatar(req, res) {
 
 async function getUserAvatar(req, res) {
   try {
+    console.log("dse")
     if (!req.params.username) {
       return res.status(404).json({ message: "No resources are available." });
     }
@@ -138,7 +140,7 @@ async function getUserAvatar(req, res) {
     if (!user.profileImgUrl) {
       return res.status(404).json({ message: "User avatar not found." });
     }
-
+    console.log("q3242342")
     return res.status(200).sendFile(path.resolve(user.profileImgUrl));
   } catch (error) {
     console.error(error, error.message);

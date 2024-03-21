@@ -8,14 +8,47 @@ export default function UpdateProfile() {
   const [formData, setFormData] = useState({
     name:user?.name ,
     lastname:user?.lastname ,
-    phone: user?.phone,
+    phoneNumber: user?.phoneNumber,
     biography:user?.biography,
   });
   const [editorState, setEditorState] = useState("");
+  const [message,setMessage] = useState("");
 
   function handleFormSubmit(e) {
     e.preventDefault();
+    fetch(`http://127.0.0.1:5000/user/${user.username}/update-user`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name:formData.name ,
+        lastname:formData.lastname ,
+        phoneNumber: formData.phoneNumber,
+        biography:formData.biography,
+      }),
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 201) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+          user.residency = formData;
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        console.log(error.message);
+        setMessage(error.message);
+      });
   }
+  console.log(formData)
   useEffect(() => {
 
     setFormData(prevData => ({
@@ -36,7 +69,6 @@ export default function UpdateProfile() {
     }));
   }
 
-  
 
   function handleEditorState(args) {
     setFormData((prevData) => ({
@@ -68,8 +100,9 @@ export default function UpdateProfile() {
         <input
           type="tel"
           placeholder="Phone"
+          name="phoneNumber"
           id="phone"
-          value={formData.phone}
+          value={formData.phoneNumber}
           onChange={handleInputChange}
         />
       </label>
@@ -81,7 +114,7 @@ export default function UpdateProfile() {
           onChange={handleEditorState}
         />
       </label>
-
+      <span style={{marginTop:"36px"}}>{message}</span>
       <button type="submit">Update</button>
     </form>
   );

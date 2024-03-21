@@ -163,11 +163,67 @@ section .user-settings-dashboard form button:hover {
   text-align: center;
 }
 
-/* Responsive design */
+.profile-avatar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.profile-avatar-container img {
+  border-radius: 50%;
+  width: 256px;
+  height: 256px;
+  box-shadow: var(--box-shadow);
+  transition: box-shadow 0.1s ease-in-out;
+}
+
+.profile-avatar img:hover {
+  box-shadow: var(--box-shadow-hover);
+  cursor: pointer;
+}
+
+section .profile-avatar-update {
+  display: flex;
+  justify-content: center;
+  column-gap: 24px;
+  align-items: center;
+  font-size: 0.99rem;
+}
+
+section .profile-avatar-update input[type="file"] {
+  width: 50%;
+  padding: 12px 0;
+  border-radius: 5px;
+  color: var(--gray-color);
+  transition: background-color 0.3s ease;
+}
+
+/* For screens smaller than 768px */
 @media (max-width: 768px) {
-  section .user-settings ul,
+  section .user-settings {
+    flex-direction: column;
+    column-gap: 0;
+    row-gap: 64px;
+  }
+  section .user-settings .user-navigation {
+    row-gap: 16x; 
+  }
+
   section .user-settings-dashboard {
-    float: none;
-    width: 100%;
+    padding: 12px;
+  }
+
+  section .profile-avatar img {
+    width: 200px;
+    height: 200px;
+  }
+
+  section .user-settings-dashboard form {
+    flex-basis: 100%;
+  }
+
+  section .profile-avatar-update input[type="file"]{
+    width: 75%;
   }
 }

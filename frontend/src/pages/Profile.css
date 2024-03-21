@@ -36,6 +36,8 @@
 
 .profile-showcase .profile-avatar .profile-username {
     text-align: center;
+    bottom: -50px;
+    left: -50px;
     margin-top: 8px;
     display: flex;
     flex-direction: column;
