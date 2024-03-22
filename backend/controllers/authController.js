@@ -81,7 +81,10 @@ async function register(req, res) {
           biography: user.biography,
           role: user.role,
           events: user.events,
-          profileImgUrl: user.profileImgUrl
+          profileImgUrl: user.profileImgUrl,
+          twitter:"",
+          instagram:"",
+          snapchat:""
         }
       });
   } catch (error) {

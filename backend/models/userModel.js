@@ -65,6 +65,21 @@
       type: String,
       default: "normal",
     },
+    snapchat: {
+      type:String,
+      minLength:1,
+      maxLength:32,
+    },
+    twitter:{
+      type:String,
+      minlength:1,
+      maxLength:32,
+    },
+    instagram:{
+      type:String,
+      minLength:1,
+      maxLength:32
+    },
     events: [{
       type:mongoose.Schema.ObjectId,
       required:false,

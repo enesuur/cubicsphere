@@ -17,6 +17,7 @@ const {
   updateResidency,
   updateUser,
   updateBiography,
+  updateSocialAccounts,
   getUserAvatar,
   deleteUser
 } = require("../controllers/userController");
@@ -38,6 +39,7 @@ route.patch("/user/:username/update-avatar", [checkUser,uploadImg.single("avatar
 route.patch("/user/:username/update-residency", checkUser, updateResidency);
 route.patch("/user/:username/update-user", checkUser, updateUser);
 route.patch("/user/:username/update-biography", checkUser, updateBiography);
+route.patch("/user/:username/update-socials", checkUser, updateSocialAccounts);
 route.delete("/user/delete-user", checkUser, deleteUser);
 
 

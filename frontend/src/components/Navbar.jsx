@@ -87,7 +87,7 @@ export default function Navbar() {
                 <NavLink to={"/events"} onClick={handleMenuClick} >Events</NavLink>
               </li>
               <li style={{ backgroundColor: "var(--background-color)", color:"var(--font-primary-color)", border: "none" }}>
-                <NavLink to={"/profile"} onClick={handleMenuClick} >Profile</NavLink>
+                <NavLink to={`/profile/${authContext.user.username}`} onClick={handleMenuClick} >Profile</NavLink>
               </li>
               <li>
                 <NavLink to={"/manage-events"} onClick={handleMenuClick} >Manage Events</NavLink>

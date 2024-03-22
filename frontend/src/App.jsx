@@ -20,7 +20,7 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route path="/profile/:username" element={<Profile />} />
       <Route path="/user-settings" element={<UserSettings />} />
       <Route path="/manage-events" element={<ManageEvents />} />
       <Route path="/events" element={<Events />} />

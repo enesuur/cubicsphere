@@ -3,6 +3,7 @@ import UpdateProfile from "../components/manage/user/UpdateProfile";
 import UpdateResidency from "../components/manage/user/UpdateResidency";
 import UpdatePassword from "../components/manage/user/UpdatePassword";
 import UpdateAvatar from "../components/manage/user/UpdateAvatar";
+import UpdateSocialAccounts from "../components/manage/user/UpdateSocialAccounts";
 import DeleteUser from "../components/manage/user/DeleteUser";
 import "./UserSettings.css";
 
@@ -30,6 +31,9 @@ export default function Settings() {
           <li onClick={() => handleEndpointSelection("avatar")}>
             Update Avatar
           </li>
+          <li onClick={() => handleEndpointSelection("social")}>
+            Update Social Accounts
+          </li>
           <li onClick={() => handleEndpointSelection("delete")}>
             Delete My Account
           </li>
@@ -40,6 +44,7 @@ export default function Settings() {
           {endpoint === "residency" && <UpdateResidency />}
           {endpoint === "password" && <UpdatePassword />}
           {endpoint === "avatar" && <UpdateAvatar />}
+          {endpoint === "social" && <UpdateSocialAccounts />}
           {endpoint === "delete" && <DeleteUser />}
         </div>
       </div>

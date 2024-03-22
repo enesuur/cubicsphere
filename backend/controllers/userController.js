@@ -60,6 +60,7 @@ async function getUser(req, res) {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
+    console.log(user)
     return res.status(200).json({
       user: {
         username: user.username,
@@ -67,8 +68,12 @@ async function getUser(req, res) {
         lastname: user.lastname,
         profileImg: user.profileImgUrl,
         residency: user.residency,
+        biography:user.biography,
         role: user.role,
-        birthday: user.birthday
+        birthday: user.birthday,
+        twitter:user.twitter,
+        instagram:user.instagram,
+        snapchat:user.snapchat
       }
     });
   } catch (error) {
@@ -126,7 +131,6 @@ async function updateAvatar(req, res) {
 
 async function getUserAvatar(req, res) {
   try {
-    console.log("dse")
     if (!req.params.username) {
       return res.status(404).json({ message: "No resources are available." });
     }
@@ -169,6 +173,33 @@ async function updateBiography(req, res) {
   }
 }
 
+async function updateSocialAccounts(req, res) {
+  try {
+    if (!req.body || !req.body.twitter || !req.body.instagram || !req.body.snapchat) {
+      return res.status(400).json({ message: "Fill all the fields." });
+    }
+    const updatedUser = await User.findByIdAndUpdate(
+      res.locals.user._id,
+      {
+        twitter: req.body.twitter,
+        instagram: req.body.instagram,
+        snapchat: req.body.snapchat
+      },
+      { new: true }
+    );
+    
+    console.log(updatedUser)
+    if (!updatedUser) {
+      return res.status(400).json({ message: "User not found." });
+    }
+    return res.status(201).json({ message: "Social Accounts were updated successfully." });
+  } catch (error) {
+    console.error(error, error.message);
+    console.log("Something went wrong on updateSocialAccounts");
+    return res.status(500).json({ message: "An error occurred while updating profile image" });
+  }
+}
+
 async function deleteUser(req, res) {
   try {
     const result = await User.deleteOne({ _id: new ObjectId(res.locals.user._id) });
@@ -191,5 +222,6 @@ module.exports = {
   updateAvatar,
   updateResidency,
   updateBiography,
-  deleteUser
+  deleteUser,
+  updateSocialAccounts
 };
