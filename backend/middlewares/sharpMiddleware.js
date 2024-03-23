@@ -8,7 +8,6 @@ async function processImage(req, res, next) {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded." });
     }
-
     const processedImageBuffer = await sharp(req.file.buffer)
       .resize({ width: 1024, height: 768 })
       .jpeg({ quality: 80 })

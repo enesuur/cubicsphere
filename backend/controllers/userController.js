@@ -11,12 +11,15 @@ async function updateUser(req, res) {
     const { phoneNumber, name, lastname,biography } = req.body;
     const user = await User.findByIdAndUpdate(
       res.locals.user._id,
-      { phoneNumber: phoneNumber },
-      { name: name },
-      { lastname: lastname },
-      { biography: biography},
+      { 
+        phoneNumber: phoneNumber,
+        name: name,
+        lastname: lastname,
+        biography: biography
+      },
       { new: true }
     );
+
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }

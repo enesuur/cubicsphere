@@ -5,7 +5,7 @@ const User = require("../models/userModel");
 
 async function createPhysicalEvent(req, res) {
   try {
-    const { title, description, startDate, dueDate, quota, address, city, state, country, category } = req.body;
+    const { title, description, startDate, dueDate, quota, address, city, state, country, category} = req.body;
     if (
       !title ||
       !description ||
@@ -20,7 +20,7 @@ async function createPhysicalEvent(req, res) {
     ) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-p
+
     const slug = slugify(`${title}-${Math.random().toString(36).substring(7)}`, {
       lower: true,
       strict: true,
@@ -68,7 +68,6 @@ async function createOnlineEvent(req, res) {
     if (!title || !description || !startDate || !dueDate || !quota || !category) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-
     const slug = slugify(`${title}-${Math.random().toString(36).substring(7)}`, {
       lower: true,
       strict: true,
