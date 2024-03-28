@@ -1,20 +1,20 @@
-/* Create an online event component.
-returns a form to the manageEvent dashbaord.
-*/
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useState } from "react";
-export default function CreatePhsyicalEvent() {
+
+export default function CreatePhysicalEvent() {
   const [editorState, setEditorState] = useState("");
   const [file, setFile] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("Webinar");
-  const [onlineEventData, setOnlineEventData] = useState({
+  const [message, setMessage] = useState("");
+  const [fileUrl,setFileUrl] = useState("");
+  const [formData, setFormData] = useState({
     title: "",
     description: "",
     startDate: "",
     dueDate: "",
-    quota: "",
-    category: "",
+    quota: 0,
+    category: "Webinar",
     address: "",
     state: "",
     country: "",
@@ -23,45 +23,73 @@ export default function CreatePhsyicalEvent() {
 
   function handleInputChange(e) {
     const { name, value } = e.target;
-    setOnlineEventData((prevData) => ({
+    setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   }
 
   function handleEditorState(des) {
-    setOnlineEventData((prevData) => ({
+    setFormData((prevData) => ({
       ...prevData,
       description: des,
     }));
   }
 
   function handleFileChange(event) {
-    const selectedFile = event.target.files[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setFile(event.target.result);
-      };
-      reader.readAsDataURL(selectedFile);
-    }
+    setFile(event.target.files[0]);
+    setFileUrl(URL.createObjectURL(event.target.files[0]));
   }
-  function handleSubmit(e) {
+
+  function handleFormSubmit(e) {
     e.preventDefault();
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("startDate", formData.startDate);
+    data.append("dueDate", formData.dueDate);
+    data.append("quota", formData.quota);
+    data.append("category", formData.category);
+    data.append("address", formData.address);
+    data.append("state", formData.state);
+    data.append("country", formData.country);
+    data.append("city", formData.city);
+    data.append("eventImage", file);
+    
+    fetch(`http://127.0.0.1:5000/event/create-physical-event`, {
+      method: "POST",
+      body: data,
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 201) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          console.log(data.message);
+          setMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log(error.message);
+        setMessage(error.message);
+      });
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Create an Physical Event</h2>
-      {console.log(onlineEventData)}
-      {console.log(editorState)}
+    <form onSubmit={handleFormSubmit} encType="multipart/form-data">
+      <h2>Create a Physical Event</h2>
       <label htmlFor="title">
         Event Name
         <input
           type="text"
           id="title"
           name="title"
-          value={onlineEventData.title}
+          value={formData.title}
           onChange={handleInputChange}
           required
         />
@@ -70,7 +98,7 @@ export default function CreatePhsyicalEvent() {
         Event Description
         <ReactQuill
           theme="snow"
-          value={onlineEventData.description}
+          value={formData.description}
           onChange={handleEditorState}
         />
       </label>
@@ -80,7 +108,7 @@ export default function CreatePhsyicalEvent() {
           type="date"
           id="startDate"
           name="startDate"
-          value={onlineEventData.eventDate}
+          value={formData.eventDate}
           onChange={handleInputChange}
           required
         />
@@ -91,7 +119,7 @@ export default function CreatePhsyicalEvent() {
           type="date"
           id="dueDate"
           name="dueDate"
-          value={onlineEventData.dueDate}
+          value={formData.dueDate}
           onChange={handleInputChange}
           required
         />
@@ -103,7 +131,7 @@ export default function CreatePhsyicalEvent() {
           type="number"
           id="quota"
           name="quota"
-          value={onlineEventData.quota}
+          value={formData.quota}
           onChange={handleInputChange}
           required
         />
@@ -113,11 +141,11 @@ export default function CreatePhsyicalEvent() {
         <select
           id="category"
           name="category"
-          value={onlineEventData.category}
+          value={formData.category}
           onChange={handleInputChange}
         >
-          <option value={onlineEventData.category}>Webinar</option>
-          <option value={onlineEventData.category}>Conference</option>
+          <option value="Webinar">Webinar</option>
+          <option value="Conference">Conference</option>
         </select>
       </label>
 
@@ -127,45 +155,43 @@ export default function CreatePhsyicalEvent() {
           type="text"
           id="address"
           name="address"
-          value={onlineEventData.address}
+          value={formData.address}
           onChange={handleInputChange}
           required
         />
       </label>
 
-      
       <label htmlFor="city">
-        Address
+        City
         <input
           type="text"
           id="city"
           name="city"
-          value={onlineEventData.city}
+          value={formData.city}
           onChange={handleInputChange}
           required
         />
       </label>
 
-            
       <label htmlFor="state">
         State
         <input
           type="text"
           id="state"
           name="state"
-          value={onlineEventData.state}
+          value={formData.state}
           onChange={handleInputChange}
           required
         />
       </label>
-      
-      <label htmlFor="state">
+
+      <label htmlFor="country">
         Country
         <input
           type="text"
           id="country"
           name="country"
-          value={onlineEventData.country}
+          value={formData.country}
           onChange={handleInputChange}
           required
         />
@@ -181,13 +207,14 @@ export default function CreatePhsyicalEvent() {
           onChange={handleFileChange}
         />
       </label>
-      {console.log(file)}
       {file && (
         <div className="preview-image">
           <h2 style={{ textAlign: "center" }}>Preview:</h2>
-          <img src={file} alt="Preview" style={{ maxWidth: "256px" }} />
+
+          <img src={fileUrl} alt="Preview" style={{ maxWidth: "256px" }} />
         </div>
       )}
+      {message}
       <button type="submit" className="btn-submit">
         Create Event
       </button>

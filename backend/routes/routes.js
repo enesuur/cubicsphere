@@ -8,7 +8,10 @@ const {
   getEvent,
   getEventsByCategory,
   getFilteredEvents,
-  deleteEvent }
+  getUserEvents,
+  deleteEvent, 
+  getEventImage,
+  getUserOnlineEvents}
 = require("../controllers/eventController");
 const {
   getUser,
@@ -44,13 +47,15 @@ route.delete("/user/delete-user", checkUser, deleteUser);
 
 
 // Event route handler
-route.get("/event/:slug",checkUser,getEvent);
+route.get("/event/user-online-events",checkUser,getUserOnlineEvents);
+route.get("/event/img/:eventId",getEventImage);
 route.post("/event/create-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], createPhysicalEvent);
 route.post("/event/create-online-event", [checkUser,uploadImg.single("eventImage"),processImage], createOnlineEvent);
 route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], updatePhysicalEvent);
 route.delete("/event/delete-event", checkUser, deleteEvent);
 route.get("/events/get-events-by-category", checkUser, getEventsByCategory);
 route.get("/events/filter-events", checkUser, getFilteredEvents);
+route.get("/event/:slug",checkUser,getEvent);
 
 
 // search route handler

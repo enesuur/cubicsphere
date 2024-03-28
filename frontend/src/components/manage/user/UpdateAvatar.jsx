@@ -50,7 +50,6 @@ export default function UpdateAvatar() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("avatar", avatar);
-
     fetch(`http://127.0.0.1:5000/user/${user.username}/update-avatar`, {
       method: "PATCH",
       body: formData,

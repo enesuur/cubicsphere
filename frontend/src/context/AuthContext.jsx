@@ -15,7 +15,6 @@ export function AuthContextProvider({ children }) {
                     credentials: "include",
                 });
                 const data = await response.json();
-                console.log(response)
                 if(response.status === 400 || response.status === 401 || response.status === 404  ){
                     setUser(null);
                 }else{

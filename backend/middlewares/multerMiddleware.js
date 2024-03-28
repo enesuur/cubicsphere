@@ -3,7 +3,6 @@ const path = require("path");
 
 const storage = multer.memoryStorage();
 
-
 const uploadImg = multer({
   storage: storage,
   limits: { fileSize: 1024 * 1024 * 5 },
@@ -15,5 +14,6 @@ const uploadImg = multer({
     }
   }
 });
+
 
 module.exports = uploadImg;

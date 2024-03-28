@@ -7,9 +7,16 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Profile.css";
 
+// HTML içeriğini güvenli bir şekilde render etmek için bileşen
+function HTMLRenderer({ htmlContent }) {
+  return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
+}
+
 export default function Profile() {
   let { username } = useParams();
   const [user, setUser] = useState({
+    name:"",
+    lastname: "",
     username: "",
     twitter: "",
     instagram: "",
@@ -19,6 +26,7 @@ export default function Profile() {
     attendance: 0,
     biography: "",
     birthday: "",
+    profileImgUrl: "",
   });
   const [message, setMessage] = useState("");
 
@@ -29,51 +37,61 @@ export default function Profile() {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
-      .then(async (response) => {
-        if (response.status === 201) {
-          const data = await response.json();
-          console.log(data);
-          setMessage(data.message);
-          setUser({
-            username: data.username || "",
-            twitter: data.twitter || "",
-            instagram: data.instagram || "",
-            snapchat: data.snapchat || "",
-            biography: data.biography || "",
-            birthday: data.birthday || "",
-            joinedAt: data.joinedAt || 0,
-            organized: data.organized || 0,
-            attendance: data.attendance || 0,
-          });
-        }
-        if (response.status === 404 || response.status === 400) {
-          const data = await response.json();
-          console.log(data.message);
-          setMessage(data.message);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        console.log(error.message);
-        setMessage(error.message);
+    }).then(async (response ) => {
+      const data = await response.json();
+      const { user } = data; 
+      setUser({
+        name: user.name || "",
+        lastname: user.lastname || "",
+        username: user.username || "",
+        twitter: user.twitter || "",
+        instagram: user.instagram || "",
+        snapchat: user.snapchat || "",
+        joinedAt: user.joinedAt || 0,
+        organized: user.organized || 0,
+        attendance: user.attendance || 0,
+        biography: user.biography || "",
+        birthday: user.birthday || "",
+        profileImgUrl: user.profileImgUrl || "",
       });
+    });
+  }, []);
 
-      fetch();
+  useEffect(() => {
+    function getUserAvatar() {
+      fetch(`http://127.0.0.1:5000/user/${user.username}/avatar`, {
+        method: "GET",
+        credentials: "include",
+      })
+        .then(async (response) => {
+          if (response.status === 202) {
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+            console.log(imageUrl);
+          }
+          if (response.status === 404 || response.status === 400) {
+            console.log("Resource was not exist.");
+          }
+        })
+        .catch((error) => {
+          console.log(error.message);
+          setMessage(error.message);
+        });
+    }
+    getUserAvatar();
   }, []);
 
   return (
     <>
-      <>
         <section className="profile container">
           <div className="profile-showcase">
             <div className="profile-banner">
               <img src={Banner} alt="profile banner" />
             </div>
             <div className="profile-avatar">
-              <img src={Avatar} alt="avatar" />
+              <img src={`http://127.0.0.1:5000/user/${user.username}/avatar`} alt="avatar" loading="lazy" />
               <div className="profile-username">
-                <span>Username</span>
+                <span>{user.name} {user.lastname}</span>
                 <Link to={"/"}>@{user.username}</Link>
               </div>
             </div>
@@ -113,11 +131,10 @@ export default function Profile() {
         <section className="profile-biography container">
           <article>
             <h2>Biography</h2>
-            <p>{user.biography}</p>
+            <HTMLRenderer htmlContent={user.biography} />
             {message}
           </article>
         </section>
-      </>
     </>
   );
 }

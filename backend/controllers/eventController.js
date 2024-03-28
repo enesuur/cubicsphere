@@ -2,7 +2,7 @@ const slugify = require("slugify");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Event = require("../models/eventModel");
 const User = require("../models/userModel");
-
+const path = require("path")
 async function createPhysicalEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, address, city, state, country, category} = req.body;
@@ -199,6 +199,69 @@ async function updateOnlineEvent(req, res) {
   }
 }
 
+async function getUserEvents(req, res) {
+  try {
+    if(!res.locals.user.events){
+      return res.status(404).json({message: "No events to show."});
+    }
+    const events = await Event.find({ _id: { $in: res.locals.user.events } });
+    if(events) {
+      return res.status(200).json(events);
+    }else {
+      res.status(404).json({message: "Your events could not be found."})
+    }
+  } catch (error) {
+    console.log(error, error.message);
+    return res
+      .status(500)
+      .json({ error: "Internal server error", message: "Error occured in getUserEvents method." });
+  }
+}
+
+async function getUserEvents(req, res) {
+  try {
+    if(!res.locals.user.events){
+      return res.status(404).json({message: "No events to show."});
+    }
+    const events = await Event.find({ _id: { $in: res.locals.user.events } });
+    if(events) {
+      return res.status(200).json(events);
+    }else {
+      res.status(404).json({message: "Your events could not be found."})
+    }
+  } catch (error) {
+    console.log(error, error.message);
+    return res
+      .status(500)
+      .json({ error: "Internal server error", message: "Error occured in getUserEvents method." });
+  }
+}
+
+async function getUserOnlineEvents(req, res) {
+  try {
+    if (!res.locals.user.events || res.locals.user.events.length === 0) {
+      return res.status(404).json({ message: "No events to show." });
+    }
+
+    const events = await Event.find({
+      $and: [
+        { _id: { $in: res.locals.user.events } },
+        { isOnline: true }
+      ]
+    });
+
+    if (events.length > 0) {
+      return res.status(200).json(events);
+    } else {
+      return res.status(404).json({ message: "No online events found for the user." });
+    }
+  } catch (error) {
+    console.error(error, error.message);
+    return res.status(500).json({ error: "Internal server error", message: "Error occurred in getUserEvents method." });
+  }
+}
+
+
 async function deleteEvent(req, res) {
   try {
     const { eventId } = req.body;
@@ -279,6 +342,30 @@ async function getEventsByLocation(req,res){
   }
 }
 
+async function getEventImage(req, res) {
+  try {
+    if (!req.params.eventId) {
+      return res.status(404).json({ message: "No resources are available." });
+    }
+
+    const event = await Event.findById(req.params.eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found." });
+    }
+
+    if (!event.eventCoverImgUrl) {
+      return res.status(404).json({ message: "Event image not found." });
+    }
+    console.log(event.eventCoverImgUrl)
+    return res.status(200).sendFile(path.resolve(event.eventCoverImgUrl));
+  } catch (error) {
+    console.error(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+}
+
+
 async function getFilteredEvents(req,res){
   try{
     const { address, city,state,country, isOnline,quota, category} = req.query;
@@ -330,5 +417,8 @@ module.exports = {
   getEvent,
   getEventsByCategory,
   getFilteredEvents,
-  deleteEvent
+  getEventImage,
+  deleteEvent,
+  getUserEvents,
+  getUserOnlineEvents
 };
