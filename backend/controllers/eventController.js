@@ -165,6 +165,7 @@ async function updateOnlineEvent(req, res) {
     if (!title || !description || !startDate || !dueDate || !quota || !category || !eventId) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
+    console.log(req.body)
 
     const isEventExist = res.locals.user.events.some((id) => new ObjectId(id).equals(eventId));
 
@@ -218,22 +219,27 @@ async function getUserEvents(req, res) {
   }
 }
 
-async function getUserEvents(req, res) {
+async function getUserPhysicalEvents(req, res) {
   try {
-    if(!res.locals.user.events){
-      return res.status(404).json({message: "No events to show."});
+    if (!res.locals.user.events || res.locals.user.events.length === 0) {
+      return res.status(404).json({ message: "No events to show." });
     }
-    const events = await Event.find({ _id: { $in: res.locals.user.events } });
-    if(events) {
+
+    const events = await Event.find({
+      $and: [
+        { _id: { $in: res.locals.user.events } },
+        { isOnline: false }
+      ]
+    });
+
+    if (events.length > 0) {
       return res.status(200).json(events);
-    }else {
-      res.status(404).json({message: "Your events could not be found."})
+    } else {
+      return res.status(404).json({ message: "No online events found for the user." });
     }
   } catch (error) {
-    console.log(error, error.message);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", message: "Error occured in getUserEvents method." });
+    console.error(error, error.message);
+    return res.status(500).json({ error: "Internal server error", message: "Error occurred in getUserEvents method." });
   }
 }
 
@@ -291,12 +297,12 @@ async function deleteEvent(req, res) {
 
 async function getEvent(req, res) {
   try {
-    const { slug } = req.body;
+    const { slug } = req.params;
     const event = await Event.findOne({ slug });
     if (!event) {
       return res.status(404).json({ message: "Page not found." });
     }
-    res.send(200).json({ event: event });
+    return res.status(200).json({ event: event });
   } catch (error) {
     console.log(error, error.message);
     return res.status(505).json({ message: "Internal server error." });
@@ -409,6 +415,18 @@ async function getFilteredEvents(req,res){
   }
 }
 
+async function getLatestEvents(req,res){
+  try {
+    const latestEvents = await Event.find().sort({ createdAt: -1 }).limit(10);
+    if(!latestEvents){
+      return res.status(200).json({ message: "Noone is up here :/"});
+    }
+    return res.status(200).json(latestEvents);
+  }catch(error){
+    return res.status(500).json({ message: "Internal server error"});
+  }
+}
+
 module.exports = {
   createPhysicalEvent,
   createOnlineEvent,
@@ -420,5 +438,7 @@ module.exports = {
   getEventImage,
   deleteEvent,
   getUserEvents,
-  getUserOnlineEvents
+  getUserOnlineEvents,
+  getUserPhysicalEvents,
+  getLatestEvents
 };

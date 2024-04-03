@@ -1,6 +1,6 @@
 footer {
     font-family: 'Inter', sans-serif, serif;
-    margin-top: 80px;
+    margin-top: auto;
     padding: 32px;
     height: auto;
     background-color: var(--primary-darker-color);

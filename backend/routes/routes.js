@@ -11,7 +11,11 @@ const {
   getUserEvents,
   deleteEvent, 
   getEventImage,
-  getUserOnlineEvents}
+  updateOnlineEvent,
+  getUserOnlineEvents,
+  getUserPhysicalEvents,
+  getLatestEvents
+}
 = require("../controllers/eventController");
 const {
   getUser,
@@ -22,7 +26,8 @@ const {
   updateBiography,
   updateSocialAccounts,
   getUserAvatar,
-  deleteUser
+  deleteUser,
+  getUserById
 } = require("../controllers/userController");
 const retrieveUser = require("../controllers/retrieveUser");
 const displayUsers = require("../api/userApi");
@@ -34,6 +39,7 @@ const route = express.Router();
 route.post("/register", register);
 route.post("/login", login);
 route.get("/logout", logout);
+route.post("/user/find-user-by-id", getUserById);
 route.get("/user/:username", getUser);
 route.get("/retrieve-user", checkUser,retrieveUser);
 route.get("/user/:username/avatar", getUserAvatar);
@@ -48,10 +54,14 @@ route.delete("/user/delete-user", checkUser, deleteUser);
 
 // Event route handler
 route.get("/event/user-online-events",checkUser,getUserOnlineEvents);
+route.get("/event/user-physical-events",checkUser,getUserPhysicalEvents);
+route.get("/event/user-events",checkUser,getUserEvents);
+route.get("/event/latest-events",getLatestEvents);
 route.get("/event/img/:eventId",getEventImage);
 route.post("/event/create-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], createPhysicalEvent);
 route.post("/event/create-online-event", [checkUser,uploadImg.single("eventImage"),processImage], createOnlineEvent);
 route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], updatePhysicalEvent);
+route.put("/event/update-online-event", [checkUser,uploadImg.single("eventImage"),processImage], updateOnlineEvent);
 route.delete("/event/delete-event", checkUser, deleteEvent);
 route.get("/events/get-events-by-category", checkUser, getEventsByCategory);
 route.get("/events/filter-events", checkUser, getFilteredEvents);

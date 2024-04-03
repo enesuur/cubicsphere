@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import UserSettings from "./pages/UserSettings";
+import Event from "./pages/Event";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/ManageEvents";
 const router = createBrowserRouter(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path="/profile/:username" element={<Profile />} />
       <Route path="/user-settings" element={<UserSettings />} />
       <Route path="/manage-events" element={<ManageEvents />} />
+      <Route path="/event/:slug" element={<Event/>} />
       <Route path="/events" element={<Events />} />
       <Route path="*" element={<NotFound />} />
     </Route>

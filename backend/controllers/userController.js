@@ -2,16 +2,17 @@ const ObjectId = require("mongoose").Types.ObjectId;
 const bcrypt = require("bcrypt");
 const path = require("path");
 const User = require("../models/userModel");
+const mongoose = require('mongoose');
 
 async function updateUser(req, res) {
   try {
     if (!req.body || !req.body.phoneNumber || !req.body.name || !req.body.lastname) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-    const { phoneNumber, name, lastname,biography } = req.body;
+    const { phoneNumber, name, lastname, biography } = req.body;
     const user = await User.findByIdAndUpdate(
       res.locals.user._id,
-      { 
+      {
         phoneNumber: phoneNumber,
         name: name,
         lastname: lastname,
@@ -63,7 +64,6 @@ async function getUser(req, res) {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
-    console.log(user)
     return res.status(200).json({
       user: {
         username: user.username,
@@ -71,18 +71,39 @@ async function getUser(req, res) {
         lastname: user.lastname,
         profileImg: user.profileImgUrl,
         residency: user.residency,
-        biography:user.biography,
+        biography: user.biography,
         role: user.role,
         birthday: user.birthday,
-        twitter:user.twitter,
-        instagram:user.instagram,
-        snapchat:user.snapchat
+        twitter: user.twitter,
+        instagram: user.instagram,
+        snapchat: user.snapchat
       }
     });
   } catch (error) {
     console.log(error, error.message);
     console.log("Something went wrong on getUser()");
     res.status(404).json({ message: "Internal server error." });
+  }
+}
+
+async function getUserById(req, res) {
+  try {
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({ message: "No user id provided." });
+    }
+    console.log(id)
+    const foundUser = await User.findById(id);
+    if (!foundUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
+  
+    return res.status(200).json({
+      username: foundUser.username
+    });
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
@@ -124,7 +145,9 @@ async function updateAvatar(req, res) {
     if (!updatedUser) {
       return res.status(400).json({ message: "User not found." });
     }
-    return res.status(201).json({ message: "Profile photo was updated succesfully.",profileImgUrl:updatedUser.profileImgUrl} );
+    return res
+      .status(201)
+      .json({ message: "Profile photo was updated succesfully.", profileImgUrl: updatedUser.profileImgUrl });
   } catch (error) {
     console.error(error, error.message);
     console.log("Something went wrong on updateProfileImg()");
@@ -147,7 +170,7 @@ async function getUserAvatar(req, res) {
     if (!user.profileImgUrl) {
       return res.status(404).json({ message: "User avatar not found." });
     }
-    console.log("q3242342")
+    console.log("q3242342");
     return res.status(200).sendFile(path.resolve(user.profileImgUrl));
   } catch (error) {
     console.error(error, error.message);
@@ -190,8 +213,8 @@ async function updateSocialAccounts(req, res) {
       },
       { new: true }
     );
-    
-    console.log(updatedUser)
+
+    console.log(updatedUser);
     if (!updatedUser) {
       return res.status(400).json({ message: "User not found." });
     }
@@ -226,5 +249,6 @@ module.exports = {
   updateResidency,
   updateBiography,
   deleteUser,
-  updateSocialAccounts
+  updateSocialAccounts,
+  getUserById
 };

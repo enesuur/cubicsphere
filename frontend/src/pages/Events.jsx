@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EventCard from "../components/cards/EventCard";
 import "./Events.css";
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [message, setMessage] = useState("");
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [formData, setFormData] = useState({
     category: "",
     startDate: "",
@@ -77,6 +79,26 @@ export default function Events() {
     }));
   }
 
+  useEffect(() => {
+    fetch(`http://127.0.0.1:5000/event/latest-events`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+          setFilteredEvents(data);
+          console.log(data, data.message);
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          setMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        setMessage(error.message);
+      });
+  }, []);
   return (
     <>
       <section className="container">
@@ -241,35 +263,15 @@ export default function Events() {
 
           <div className="events">
             <input type="text" placeholder="Search an event.." />
-            <EventCard
-              title="Kontak bugün partiliyor blyat!"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet ante euismod, efficitur ligula vel, eleifend justo."
-              date="March 20, 2024"
-              time="10:00 AM - 12:00 PM"
-              location="123 Main Street, Cityville"
-            />
-                        <EventCard
-              title="Kontak bugün partiliyor blyat!"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet ante euismod, efficitur ligula vel, eleifend justo."
-              date="March 20, 2024"
-              time="10:00 AM - 12:00 PM"
-              location="123 Main Street, Cityville"
-            />
-                        <EventCard
-              title="Kontak bugün partiliyor blyat!"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet ante euismod, efficitur ligula vel, eleifend justo."
-              date="March 20, 2024"
-              time="10:00 AM - 12:00 PM"
-              location="123 Main Street, Cityville"
-            />
-                        <EventCard
-              title="Kontak bugün partiliyor blyat!"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet ante euismod, efficitur ligula vel, eleifend justo."
-              date="March 20, 2024"
-              time="10:00 AM - 12:00 PM"
-              location="123 Main Street, Cityville"
-            />
-            {console.log(formData)}
+            {filteredEvents.length > 0 &&
+              filteredEvents.map((eventObj, key) => {
+                return (
+                  <EventCard
+                    key={key}
+                    eventObj={eventObj}
+                  />
+                );
+              })}
           </div>
         </div>
       </section>
