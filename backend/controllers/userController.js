@@ -92,7 +92,6 @@ async function getUserById(req, res) {
     if (!id) {
       return res.status(400).json({ message: "No user id provided." });
     }
-    console.log(id)
     const foundUser = await User.findById(id);
     if (!foundUser) {
       return res.status(404).json({ message: "User not found." });
@@ -102,7 +101,7 @@ async function getUserById(req, res) {
       username: foundUser.username
     });
   } catch (error) {
-    console.log(error, error.message);
+    // console.log(error, error.message);
     return res.status(500).json({ message: "Internal server error." });
   }
 }
@@ -170,7 +169,6 @@ async function getUserAvatar(req, res) {
     if (!user.profileImgUrl) {
       return res.status(404).json({ message: "User avatar not found." });
     }
-    console.log("q3242342");
     return res.status(200).sendFile(path.resolve(user.profileImgUrl));
   } catch (error) {
     console.error(error, error.message);

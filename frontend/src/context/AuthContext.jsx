@@ -27,7 +27,7 @@ export function AuthContextProvider({ children }) {
         };
         retrieveUser();
     }, []);
-
+    
     return (
         <AuthContext.Provider 
         value={{ 

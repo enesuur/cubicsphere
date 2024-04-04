@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Profile.css";
 
-// HTML içeriğini güvenli bir şekilde render etmek için bileşen
+
 function HTMLRenderer({ htmlContent }) {
   return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
 }

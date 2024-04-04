@@ -84,7 +84,7 @@ const userSchema = mongoose.Schema(
     events: [
       {
         type: mongoose.Schema.ObjectId,
-        required: false
+        required: false,
       }
     ]
   },

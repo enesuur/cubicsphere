@@ -14,7 +14,8 @@ const {
   updateOnlineEvent,
   getUserOnlineEvents,
   getUserPhysicalEvents,
-  getLatestEvents
+  getLatestEvents,
+  getEventAttenders
 }
 = require("../controllers/eventController");
 const {
@@ -51,13 +52,14 @@ route.patch("/user/:username/update-biography", checkUser, updateBiography);
 route.patch("/user/:username/update-socials", checkUser, updateSocialAccounts);
 route.delete("/user/delete-user", checkUser, deleteUser);
 
-
+getEventAttenders
 // Event route handler
 route.get("/event/user-online-events",checkUser,getUserOnlineEvents);
 route.get("/event/user-physical-events",checkUser,getUserPhysicalEvents);
 route.get("/event/user-events",checkUser,getUserEvents);
 route.get("/event/latest-events",getLatestEvents);
 route.get("/event/img/:eventId",getEventImage);
+route.post("/event/event-attenders",getEventAttenders);
 route.post("/event/create-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], createPhysicalEvent);
 route.post("/event/create-online-event", [checkUser,uploadImg.single("eventImage"),processImage], createOnlineEvent);
 route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], updatePhysicalEvent);

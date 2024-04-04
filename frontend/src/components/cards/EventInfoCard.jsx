@@ -22,7 +22,7 @@ export default function EventInfoCard({
   }
   const formattedStartDate = formatDate(eventObj.startDate);
   const formattedDueDate = formatDate(eventObj.dueDate);
-
+ 
   return (
     <div className="event-info-card container">
       <div className="event-info-header">

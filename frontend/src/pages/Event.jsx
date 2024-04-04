@@ -1,9 +1,12 @@
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./Event.css";
 export default function Event() {
   const [eventData, setEventData] = useState({});
   const [organizer, setOrganizer] = useState("");
+  const [latestAttendees, setLatestAttendees] = useState([]);
+  const [attendCount, setAttendCount] = useState(0);
+  const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
   const { slug } = useParams();
 
@@ -71,6 +74,57 @@ export default function Event() {
       });
   }, [eventData]);
 
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/event/event-attenders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        attendList: eventData.attendants,
+      }),
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+          setMessage(data.message);
+          setLatestAttendees(data.latestAttendees);
+          setAttendCount(data.attendarCount);
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          setMessage(data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setMessage(error.message);
+      });
+  }, [eventData]);
+
+  useEffect(() => {
+    if (eventData._id) {
+      fetch(`http://127.0.0.1:5000/event/img/${eventData._id}`)
+        .then(async (response) => {
+          if (response.status === 200) {
+            const blob = await response.blob();
+            setImageUrl(URL.createObjectURL(blob));
+          }
+          if (response.status === 404 || response.status === 400) {
+            const data = await response.json();
+            setMessage(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "There has been a problem with your fetch operation:",
+            error
+          );
+        });
+    }
+  }, [eventData]);
+
   function HTMLRenderer({ htmlContent }) {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
   }
@@ -100,11 +154,7 @@ export default function Event() {
 
             <figure>
               <picture>
-                <img
-                  src={`http://127.0.0.1:5000/event/img/${eventData._id}`}
-                  alt="Event Image"
-                  loading="lazy"
-                />
+                <img src={`${imageUrl}`} alt="Event Image" loading="lazy" />
                 <figcaption>Caption:{eventData.title} Cover Image</figcaption>
               </picture>
             </figure>
@@ -152,6 +202,13 @@ export default function Event() {
               >
                 🧑Attenders
               </h2>
+              <p>Last 5 attenders</p>
+              {latestAttendees.map((attender) => (
+                <span key={attender._id}>
+                  -{attender.username}
+                  {console.log("it worked")}
+                </span>
+              ))}
             </div>
 
             <div className="event-page-organizer">
@@ -163,7 +220,7 @@ export default function Event() {
               </h2>
               <p>Organizer:{organizer}</p>
             </div>
-            <button>Attend Event</button>
+            <button className="btn-attend">Attend Event</button>
           </div>
         </div>
       </section>

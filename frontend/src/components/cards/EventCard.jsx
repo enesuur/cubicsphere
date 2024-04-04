@@ -33,12 +33,10 @@ export default function EventCard({ eventObj }) {
         if (response.status === 200) {
           const data = await response.json();
           setMessage(data.message);
-          console.log(data, "burası");
           setOrganizer(data.username);
         }
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
-          console.log(data);
           setMessage(data.message);
         }
       })
@@ -55,7 +53,7 @@ export default function EventCard({ eventObj }) {
     navigate(`/event/${eventObj.slug}`);
 
   }
-
+  console.log(eventObj);
   const formattedStartDate = formatDate(eventObj.startDate);
   const formattedDueDate = formatDate(eventObj.dueDate);
   return (

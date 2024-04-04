@@ -43,7 +43,8 @@ async function createPhysicalEvent(req, res) {
       organizer: res.locals.user._id,
       eventCoverImgUrl: req.file.path,
       slug: slug,
-      category: category
+      category: category,
+      status: "accepted"
     });
 
     const updateUser = await User.findByIdAndUpdate(
@@ -87,7 +88,8 @@ async function createOnlineEvent(req, res) {
       isOnline: true,
       eventCoverImgUrl: req.file.path,
       slug: slug,
-      category: category
+      category: category,
+      status: "accepted"
     });
 
     const updateUser = await User.findByIdAndUpdate(
@@ -165,7 +167,6 @@ async function updateOnlineEvent(req, res) {
     if (!title || !description || !startDate || !dueDate || !quota || !category || !eventId) {
       return res.status(400).json({ message: "Fill all the fields." });
     }
-    console.log(req.body)
 
     const isEventExist = res.locals.user.events.some((id) => new ObjectId(id).equals(eventId));
 
@@ -271,16 +272,15 @@ async function getUserOnlineEvents(req, res) {
 async function deleteEvent(req, res) {
   try {
     const { eventId } = req.body;
-
+    const user = res.locals.user;
     if (!eventId) {
       return res.status(400).json({ message: "Event not found." });
     }
 
-    const isEventExist = res.locals.user.events.some((id) => new ObjectId(id).equals(eventId));
+    const updatedEvents = user.events.filter(id => !new ObjectId(id).equals(eventId));
+    user.events = updatedEvents;
 
-    if (!isEventExist) {
-      return res.status(401).json({ message: "Unauthorized." });
-    }
+    await user.save();
 
     const result = await Event.deleteOne({ _id: new ObjectId(eventId) });
 
@@ -288,7 +288,7 @@ async function deleteEvent(req, res) {
       return res.status(404).json({ message: "Event was not deleted." });
     }
 
-    return res.status(201).json({ message: "Event has been deleted succesfully." });
+    return res.status(201).json({ message: "Event has been deleted successfully." });
   } catch (error) {
     console.log(error, error.message);
     return res.status(500).json({ message: "Internal server error." });
@@ -353,7 +353,10 @@ async function getEventImage(req, res) {
     if (!req.params.eventId) {
       return res.status(404).json({ message: "No resources are available." });
     }
-
+    if(req.params.eventId == undefined){
+      return res.status(400).json({ message: "No eventid,object type bla bla"})
+    }
+    // Burası çözülecek
     const event = await Event.findById(req.params.eventId);
 
     if (!event) {
@@ -363,7 +366,6 @@ async function getEventImage(req, res) {
     if (!event.eventCoverImgUrl) {
       return res.status(404).json({ message: "Event image not found." });
     }
-    console.log(event.eventCoverImgUrl)
     return res.status(200).sendFile(path.resolve(event.eventCoverImgUrl));
   } catch (error) {
     console.error(error, error.message);
@@ -427,6 +429,31 @@ async function getLatestEvents(req,res){
   }
 }
 
+async function getEventAttenders(req, res) {
+  try {
+    const { attendList } = req.body;
+    if (!attendList) {
+      return res.status(400).json({ message: "No attendlist information." });
+    }
+
+    const attenders = await User.find({ _id: { $in: attendList } });
+    const latestAttendees = await User.find({ _id: { $in: attendList } }).sort({ _id: -1 }).limit(5);
+    const attendeesArr = latestAttendees.map((attender) => ({
+      name: attender.name,
+      lastname: attender.lastname,
+      username: attender.username
+    }));
+
+    return res.status(200).json({
+      attendarCount: attenders.length,
+      latestAttendees: attendeesArr
+    });
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   createPhysicalEvent,
   createOnlineEvent,
@@ -440,5 +467,6 @@ module.exports = {
   getUserEvents,
   getUserOnlineEvents,
   getUserPhysicalEvents,
-  getLatestEvents
+  getLatestEvents,
+  getEventAttenders
 };
