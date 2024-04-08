@@ -7,6 +7,7 @@ export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [message, setMessage] = useState("");
   const [latestEvents, setLatestEvents] = useState([]);
+  const [filteredEvents,setFilteredEvents] = useState([]);
   const [formData, setFormData] = useState({
     category: "",
     startDate: "",
@@ -263,9 +264,9 @@ export default function Events() {
           </ul>
 
           <div className="events">
-            <SearchBar/>
-            {latestEvents.length > 0 &&
-              latestEvents.map((eventObj, key) => {
+            <SearchBar setFilteredEvents={setFilteredEvents}/>
+            {filteredEvents.length > 0 &&
+              filteredEvents.map((eventObj, key) => {
                 return (
                   <EventCard
                     key={key}
@@ -273,6 +274,15 @@ export default function Events() {
                   />
                 );
               })}
+            {/* {latestEvents.length > 0 &&
+              latestEvents.map((eventObj, key) => {
+                return (
+                  <EventCard
+                    key={key}
+                    eventObj={eventObj}
+                  />
+                );
+              })} */}
           </div>
         </div>
       </section>

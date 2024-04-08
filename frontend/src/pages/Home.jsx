@@ -4,7 +4,9 @@ import TrekkingImg from "../assets/img/trekking.png";
 import PriceCard from "../components/cards/PriceCard";
 import "./Home.css";
 
+
 export default function Home() {
+ 
   return (
     <>
       <section>
