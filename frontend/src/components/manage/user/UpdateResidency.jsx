@@ -53,7 +53,7 @@ export default function UpdateResidency() {
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Update Residency</h2>
+      <h2>Update Residency 🏠</h2>
       <label htmlFor="city">
         City
         <input

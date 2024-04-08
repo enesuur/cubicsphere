@@ -6,6 +6,7 @@ import UpdateAvatar from "../components/manage/user/UpdateAvatar";
 import UpdateSocialAccounts from "../components/manage/user/UpdateSocialAccounts";
 import DeleteUser from "../components/manage/user/DeleteUser";
 import "./UserSettings.css";
+import UserRequests from "../components/manage/user/UserRequests";
 
 export default function Settings() {
   const [endpoint, setEndpoint] = useState("profile");
@@ -34,6 +35,9 @@ export default function Settings() {
           <li onClick={() => handleEndpointSelection("social")}>
             Update Social Accounts
           </li>
+          <li onClick={() => handleEndpointSelection("requests")}>
+            Attend Requests
+          </li>
           <li onClick={() => handleEndpointSelection("delete")}>
             Delete My Account
           </li>
@@ -45,6 +49,7 @@ export default function Settings() {
           {endpoint === "password" && <UpdatePassword />}
           {endpoint === "avatar" && <UpdateAvatar />}
           {endpoint === "social" && <UpdateSocialAccounts />}
+          {endpoint === "requests" && <UserRequests />}
           {endpoint === "delete" && <DeleteUser />}
         </div>
       </div>

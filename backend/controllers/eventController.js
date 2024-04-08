@@ -2,10 +2,11 @@ const slugify = require("slugify");
 const ObjectId = require("mongoose").Types.ObjectId;
 const Event = require("../models/eventModel");
 const User = require("../models/userModel");
-const path = require("path")
+const path = require("path");
+const { measureMemory } = require("vm");
 async function createPhysicalEvent(req, res) {
   try {
-    const { title, description, startDate, dueDate, quota, address, city, state, country, category} = req.body;
+    const { title, description, startDate, dueDate, quota, address, city, state, country, category } = req.body;
     if (
       !title ||
       !description ||
@@ -43,8 +44,7 @@ async function createPhysicalEvent(req, res) {
       organizer: res.locals.user._id,
       eventCoverImgUrl: req.file.path,
       slug: slug,
-      category: category,
-      status: "accepted"
+      category: category
     });
 
     const updateUser = await User.findByIdAndUpdate(
@@ -88,8 +88,7 @@ async function createOnlineEvent(req, res) {
       isOnline: true,
       eventCoverImgUrl: req.file.path,
       slug: slug,
-      category: category,
-      status: "accepted"
+      category: category
     });
 
     const updateUser = await User.findByIdAndUpdate(
@@ -203,20 +202,18 @@ async function updateOnlineEvent(req, res) {
 
 async function getUserEvents(req, res) {
   try {
-    if(!res.locals.user.events){
-      return res.status(404).json({message: "No events to show."});
+    if (!res.locals.user.events) {
+      return res.status(404).json({ message: "No events to show." });
     }
     const events = await Event.find({ _id: { $in: res.locals.user.events } });
-    if(events) {
+    if (events) {
       return res.status(200).json(events);
-    }else {
-      res.status(404).json({message: "Your events could not be found."})
+    } else {
+      res.status(404).json({ message: "Your events could not be found." });
     }
   } catch (error) {
     console.log(error, error.message);
-    return res
-      .status(500)
-      .json({ error: "Internal server error", message: "Error occured in getUserEvents method." });
+    return res.status(500).json({ error: "Internal server error", message: "Error occured in getUserEvents method." });
   }
 }
 
@@ -227,10 +224,7 @@ async function getUserPhysicalEvents(req, res) {
     }
 
     const events = await Event.find({
-      $and: [
-        { _id: { $in: res.locals.user.events } },
-        { isOnline: false }
-      ]
+      $and: [{ _id: { $in: res.locals.user.events } }, { isOnline: false }]
     });
 
     if (events.length > 0) {
@@ -251,10 +245,7 @@ async function getUserOnlineEvents(req, res) {
     }
 
     const events = await Event.find({
-      $and: [
-        { _id: { $in: res.locals.user.events } },
-        { isOnline: true }
-      ]
+      $and: [{ _id: { $in: res.locals.user.events } }, { isOnline: true }]
     });
 
     if (events.length > 0) {
@@ -268,7 +259,6 @@ async function getUserOnlineEvents(req, res) {
   }
 }
 
-
 async function deleteEvent(req, res) {
   try {
     const { eventId } = req.body;
@@ -277,7 +267,7 @@ async function deleteEvent(req, res) {
       return res.status(400).json({ message: "Event not found." });
     }
 
-    const updatedEvents = user.events.filter(id => !new ObjectId(id).equals(eventId));
+    const updatedEvents = user.events.filter((id) => !new ObjectId(id).equals(eventId));
     user.events = updatedEvents;
 
     await user.save();
@@ -311,7 +301,6 @@ async function getEvent(req, res) {
 
 async function getFeaturedEvents(req, res) {
   try {
-
   } catch (error) {
     console.log(error, error.message);
     return res.status(500).json({ message: "Internal server error." });
@@ -319,32 +308,31 @@ async function getFeaturedEvents(req, res) {
 }
 
 /* returns array that contain list of event object corresponding to category selection.
-*/ 
-async function getEventsByCategory(req,res){
+ */
+async function getEventsByCategory(req, res) {
   try {
-    if(!req.query.category){
-      return res.status(400).json( { message: "Fill all the fields."})
+    if (!req.query.category) {
+      return res.status(400).json({ message: "Fill all the fields." });
     }
 
-    const events = await Event.find({ category: req.query.category })
-    if(events.length === 0){
-      return res.status(404).json({ message: "No events."})
+    const events = await Event.find({ category: req.query.category });
+    if (events.length === 0) {
+      return res.status(404).json({ message: "No events." });
     }
-    return res.status(200).json({ message: events});
-    
-  }catch(error){
-    console.log(error,error.message);
-    return res.status(500).json({ message: "Internal server error."})
+    return res.status(200).json({ message: events });
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
-async function getEventsByLocation(req,res){
+async function getEventsByLocation(req, res) {
   try {
-    const { address,city,state,country} = req.query;
-    // 
-  }catch(error){
-    console.log(error,error.message);
-    return res.status(500).json({ message: "Internal server error."})
+    const { address, city, state, country } = req.query;
+    //
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
@@ -353,8 +341,8 @@ async function getEventImage(req, res) {
     if (!req.params.eventId) {
       return res.status(404).json({ message: "No resources are available." });
     }
-    if(req.params.eventId == undefined){
-      return res.status(400).json({ message: "No eventid,object type bla bla"})
+    if (req.params.eventId == undefined) {
+      return res.status(400).json({ message: "No eventid,object type bla bla" });
     }
     // Burası çözülecek
     const event = await Event.findById(req.params.eventId);
@@ -373,84 +361,288 @@ async function getEventImage(req, res) {
   }
 }
 
-
-async function getFilteredEvents(req,res){
-  try{
-    const { address, city,state,country, isOnline,quota, category} = req.query;
-    if(address || city || state || country ||isOnline || quota || category ){
+async function getFilteredEvents(req, res) {
+  try {
+    const { address, city, state, country, isOnline, quota, category } = req.query;
+    if (address || city || state || country || isOnline || quota || category) {
       const filter = {};
-      if(address){
+      if (address) {
         filter.address = address;
       }
-      if(city){
+      if (city) {
         filter.city = city;
       }
-      if(state){
+      if (state) {
         filter.state = state;
       }
-      if(country){
+      if (country) {
         filter.country = country;
       }
-      if(isOnline){
+      if (isOnline) {
         filter.isOnline = isOnline === "true";
       }
-      if(quota){
+      if (quota) {
         filter.quota = parseInt(quota);
       }
-      if(category){
+      if (category) {
         filter.category = category;
       }
 
-      if(Object.keys(filter).length > 0){
+      if (Object.keys(filter).length > 0) {
         const events = await Event.find(filter);
-        if(events.length === 0){
-          res.status(404).json({ message: "No events to show."})
+        if (events.length === 0) {
+          res.status(404).json({ message: "No events to show." });
         }
-        return res.status(200).json({ events: events});
+        return res.status(200).json({ events: events });
       }
-
     }
     return res.status(400).json({ message: "No filter option provided." });
-  }catch(error){
-    console.log(error,error.message);
-    return res.status(500).json({ message: "Internal server error."})
+  } catch (error) {
+    console.log(error, error.message);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
-async function getLatestEvents(req,res){
+async function getLatestEvents(req, res) {
   try {
     const latestEvents = await Event.find().sort({ createdAt: -1 }).limit(10);
-    if(!latestEvents){
-      return res.status(200).json({ message: "Noone is up here :/"});
+    if (!latestEvents) {
+      return res.status(200).json({ message: "Noone is up here :/" });
     }
     return res.status(200).json(latestEvents);
-  }catch(error){
-    return res.status(500).json({ message: "Internal server error"});
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
 async function getEventAttenders(req, res) {
   try {
-    const { attendList } = req.body;
-    if (!attendList) {
-      return res.status(400).json({ message: "No attendlist information." });
+    const userEvents = await Event.find({ _id: { $in: res.locals.user.events } });
+
+    if (userEvents.length === 0) {
+      return res.status(404).json({ message: "You don't have any events." });
     }
 
-    const attenders = await User.find({ _id: { $in: attendList } });
-    const latestAttendees = await User.find({ _id: { $in: attendList } }).sort({ _id: -1 }).limit(5);
-    const attendeesArr = latestAttendees.map((attender) => ({
-      name: attender.name,
-      lastname: attender.lastname,
-      username: attender.username
-    }));
+    const attendRequestUsers = [];
+    for (const userEvent of userEvents) {
+      for (const attendRequest of userEvent.attendRequests) {
+        attendRequestUsers.push({
+          eventTitle: userEvent.title,
+          eventId:userEvent._id,
+          eventSlug: userEvent.slug,
+          user: attendRequest.user,
+          status: attendRequest.status
+        });
+      }
+    }
 
-    return res.status(200).json({
-      attendarCount: attenders.length,
-      latestAttendees: attendeesArr
+    const userObjectIds = attendRequestUsers.map((attendRequest) => attendRequest.user);
+    const attendersArr = await User.find({ _id: { $in: userObjectIds } });
+    for (const attender of attendersArr) {
+      for (const item of attendRequestUsers) {
+        if (item.user.toString() === attender._id.toString()) {
+          item.user = {
+            _id: attender._id,
+            username: attender.username,
+            name: attender.name,
+            lastname: attender.lastname,
+            email: attender.email,
+            profileImgUrl: attender.profileImgUrl,
+            eventRequests: attender.eventRequests,
+            phoneNumber: attender.phoneNumber
+          };
+        }
+      }
+    }
+
+    if (attendersArr.length === 0) {
+      return res.status(404).json({ message: "You don't have any attend request." });
+    }
+
+    return res.status(200).json({ attenders: attendRequestUsers });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function acceptAttender(req, res) {
+  try {
+    const { attenderId, eventId } = req.body;
+
+    if (!attenderId || !eventId) {
+      return res.status(400).json("Fill all the fields.");
+    }
+    const userEvents = await Event.find({ _id: eventId});
+
+    if (userEvents.length === 0) {
+      return res.status(404).json({ message: "You don't have any events with provided ID." });
+    }
+
+    const event = userEvents[0];
+
+    if (event.attendants.includes(attenderId)) {
+      return res.status(400).json({ message: "Attendee has already been accepted for this event." });
+    }
+    event.attendRequests.forEach((request) => {
+      if (request.user == attenderId) {
+        request.status = "accepted";
+        event.attendants.push(attenderId);
+      }
     });
+
+    const attendent = await User.findById(attenderId);
+
+    if(!attendent){
+      return res.status(404).json({ message: "Attendent not found." });
+    }
+    attendent.eventRequests.forEach((request) => {
+      if (request.event.toString() == eventId) {
+        request.status = "accepted"
+      }
+    });
+    await attendent.save();
+    await event.save();
+
+    return res.status(201).json({ message: "Attender accepted successfully"});
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function rejectAttender(req, res) {
+  try {
+    const { attenderId, eventId } = req.body;
+
+    if (!attenderId || !eventId) {
+      return res.status(400).json("Fill all the fields.");
+    }
+
+    const userEvents = await Event.find({ _id: eventId });
+
+    if (userEvents.length === 0) {
+      return res.status(404).json({ message: "You don't have any events with the provided ID." });
+    }
+
+    const event = userEvents[0];
+
+    event.attendRequests.forEach((request) => {
+      if (request.user == attenderId) {
+        request.status = "rejected";
+        event.attendants.push(attenderId);
+      }
+    });
+
+    const attendent = await User.findById(attenderId);
+
+    if (!attendent) {
+      return res.status(404).json({ message: "Attendant not found." });
+    }
+
+    attendent.eventRequests.forEach((request) => {
+      if (request.event.toString() === eventId) {
+        request.status = "rejected";
+      }
+    });
+
+    if (event.attendants.includes(attenderId)) {
+      event.attendants = event.attendants.filter((attendant) => attendant.toString() !== attenderId);
+    }
+
+    await attendent.save();
+    await event.save();
+
+    return res.status(201).json({ message: "Attender rejected successfully" });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function getRequestedEvents(req,res){
+  try {
+    const { eventIds } = req.body;
+    const events = await Event.find({ _id: { $in: eventIds } });
+    if (!events) {
+      return res.status(404).json({ message: "Event not found." });
+    }
+    return res.status(200).json(events);
   } catch (error) {
     console.log(error, error.message);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(505).json({ message: "Internal server error." });
+  }
+}
+
+
+async function attendToEvent(req, res) {
+  try {
+    const { eventId } = req.body;
+    if (!eventId) {
+      return res.status(400).json({ message: "No event id provided." });
+    }
+
+    const userEvent = res.locals.user.events.find((event) => event._id.equals(eventId));
+
+    if (userEvent) {
+      return res.status(400).json({ message: "You are already the organizer of this event." });
+    }
+
+    res.locals.user.events.forEach((event) => {
+      if (event._id.equals(eventId)) {
+        event.status = "pending";
+      }
+    });
+
+    const updatedUser = await User.findByIdAndUpdate(
+      res.locals.user._id,
+      {
+        $push: {
+          eventRequests: {
+            event: eventId,
+            status: "pending"
+          }
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "Update operation didn't succeed. User not found in DB." });
+    }
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      res.status(404).json({ message: "Event not found." });
+    }
+
+    const isUserInAttendRequests = event.attendRequests.some((request) => request.user.equals(res.locals.user._id));
+
+    if (isUserInAttendRequests) {
+      return res.status(400).json({ message: "User already in attend requests." });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(
+      eventId,
+      {
+        $push: {
+          attendRequests: {
+            user: res.locals.user._id,
+            status: "pending"
+          }
+        }
+      },
+      { new: true }
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({ message: "Update operation didn't succeed. Event not found in DB." });
+    }
+
+    return res.status(200).json({ message: "Attendance request sent successfully." });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
@@ -468,5 +660,9 @@ module.exports = {
   getUserOnlineEvents,
   getUserPhysicalEvents,
   getLatestEvents,
-  getEventAttenders
+  getEventAttenders,
+  attendToEvent,
+  acceptAttender,
+  rejectAttender,
+  getRequestedEvents
 };

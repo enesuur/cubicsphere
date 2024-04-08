@@ -1,6 +1,8 @@
+import { ToastContainer, toast, Bounce } from "react-toastify";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import "./Event.css";
+import AuthContext from "../context/AuthContext";
 export default function Event() {
   const [eventData, setEventData] = useState({});
   const [organizer, setOrganizer] = useState("");
@@ -8,8 +10,10 @@ export default function Event() {
   const [attendCount, setAttendCount] = useState(0);
   const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
+  const [btnText, setBtnText] = useState("");
   const { slug } = useParams();
 
+  const { user } = useContext(AuthContext);
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDay();
@@ -44,6 +48,20 @@ export default function Event() {
         setMessage(error.message);
       });
   }, []);
+
+  useEffect(() => {
+    console.log(user)
+    const result = eventData.attendRequests?.some((item) => {
+      console.log(eventData.attendRequests)
+      return item.user === user._id;
+    });
+  
+    if (result) {
+      setBtnText("Pending");
+    } else {
+      setBtnText("Attend Event");
+    }
+  }),[];
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/user/find-user-by-id", {
@@ -129,6 +147,84 @@ export default function Event() {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
   }
 
+  function notify(status, serverMessage) {
+    if (status === 200) {
+      toast.success(serverMessage, {
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+    if (status === 404 || status === 400) {
+      toast.warn(serverMessage, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+    if (status === 500) {
+      toast.error(serverMessage, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    }
+  }
+
+  function handleAttendRequest(e) {
+    e.preventDefault();
+    fetch("http://127.0.0.1:5000/event/attend-to-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        eventId: eventData._id,
+      }),
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (response.status === 200) {
+          const data = await response.json();
+          console.log(data.message, 2324);
+          setMessage(data.message);
+          notify(response.status, data.message);
+          setBtnText("Pending");
+        }
+        if (response.status === 404 || response.status === 400) {
+          const data = await response.json();
+          setMessage(data.message);
+          notify(response.status, data.message);
+        }
+      })
+      .catch((error) => {
+        setMessage(data.message);
+        notify(error, data.message);
+        console.error(
+          "There has been a problem with your fetch operation:",
+          error
+        );
+      });
+  }
+
   return (
     <>
       <section>
@@ -203,11 +299,8 @@ export default function Event() {
                 🧑Attenders
               </h2>
               <p>Last 5 attenders</p>
-              {latestAttendees.map((attender) => (
-                <span key={attender._id}>
-                  -{attender.username}
-                  {console.log("it worked")}
-                </span>
+              {latestAttendees.map((attender, idx) => (
+                <span key={idx}>-{attender.username}</span>
               ))}
             </div>
 
@@ -220,10 +313,13 @@ export default function Event() {
               </h2>
               <p>Organizer:{organizer}</p>
             </div>
-            <button className="btn-attend">Attend Event</button>
+            <button className="btn-attend" onClick={handleAttendRequest}>
+              {btnText}
+            </button>
           </div>
         </div>
       </section>
+      <ToastContainer />
     </>
   );
 }

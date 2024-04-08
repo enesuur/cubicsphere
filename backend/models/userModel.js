@@ -84,7 +84,19 @@ const userSchema = mongoose.Schema(
     events: [
       {
         type: mongoose.Schema.ObjectId,
-        required: false,
+        required: false
+      }
+    ],
+    eventRequests: [
+      {
+        event: {
+          type: mongoose.Schema.ObjectId,
+          required: false
+        },
+        status: {
+          type: String,
+          default: ""
+        }
       }
     ]
   },

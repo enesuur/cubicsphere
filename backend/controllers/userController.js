@@ -76,7 +76,8 @@ async function getUser(req, res) {
         birthday: user.birthday,
         twitter: user.twitter,
         instagram: user.instagram,
-        snapchat: user.snapchat
+        snapchat: user.snapchat,
+        eventRequests: user.eventRequests
       }
     });
   } catch (error) {

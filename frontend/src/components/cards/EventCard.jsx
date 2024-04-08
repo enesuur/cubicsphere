@@ -73,18 +73,21 @@ export default function EventCard({ eventObj }) {
       </div>
       <div className="event-details">
         <p>
-          <strong>📅 Start Date:</strong>
+          <span>📅 Start Date:</span>
           {formattedStartDate}
         </p>
         <p>
-          <strong>📅 Due Date:</strong>
+          <span>📅 Due Date:</span>
           {formattedDueDate}
         </p>
         <p>
-          <strong>📌 City:24</strong>
+          <span>📌 City:24</span>
         </p>
         <p>
-          <strong>⭐Organizer:</strong>
+          <span>📌 Quota: {`${eventObj.attendants.length}/${eventObj.quota}`}</span>
+        </p>
+        <p>
+          <span>⭐Organizer:</span>
           {organizer}
         </p>
       </div>

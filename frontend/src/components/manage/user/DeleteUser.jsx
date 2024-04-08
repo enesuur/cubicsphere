@@ -42,7 +42,7 @@ export default function DeleteUser() {
   return (
     <>
       <form onSubmit={handleFormSubmit}>
-        <h2>Delete Account</h2>
+        <h2>Delete Account 🗑️</h2>
         <label className="delete-information">
           <h3>
             You agree that the following data will be deleted by processing

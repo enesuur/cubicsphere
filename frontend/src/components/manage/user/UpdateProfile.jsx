@@ -79,7 +79,7 @@ export default function UpdateProfile() {
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Update Profile</h2>
+      <h2>Update Profile 😎</h2>
       <label htmlFor="name">
         Name
         <input type="text" placeholder="Name" id="name" name="name" value={formData.name} onChange={handleInputChange} />

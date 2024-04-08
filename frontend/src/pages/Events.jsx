@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import SearchBar from "../components/search/SearchBar";
 import EventCard from "../components/cards/EventCard";
 import "./Events.css";
 
 export default function Events() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [message, setMessage] = useState("");
-  const [filteredEvents, setFilteredEvents] = useState([]);
+  const [latestEvents, setLatestEvents] = useState([]);
   const [formData, setFormData] = useState({
     category: "",
     startDate: "",
@@ -87,7 +88,7 @@ export default function Events() {
       .then(async (response) => {
         if (response.status === 200) {
           const data = await response.json();
-          setFilteredEvents(data);
+          setLatestEvents(data);
           console.log(data, data.message);
         }
         if (response.status === 404 || response.status === 400) {
@@ -262,9 +263,9 @@ export default function Events() {
           </ul>
 
           <div className="events">
-            <input type="text" placeholder="Search an event.." />
-            {filteredEvents.length > 0 &&
-              filteredEvents.map((eventObj, key) => {
+            <SearchBar/>
+            {latestEvents.length > 0 &&
+              latestEvents.map((eventObj, key) => {
                 return (
                   <EventCard
                     key={key}

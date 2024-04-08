@@ -15,7 +15,11 @@ const {
   getUserOnlineEvents,
   getUserPhysicalEvents,
   getLatestEvents,
-  getEventAttenders
+  getEventAttenders,
+  attendToEvent,
+  acceptAttender,
+  rejectAttender,
+  getRequestedEvents
 }
 = require("../controllers/eventController");
 const {
@@ -52,8 +56,13 @@ route.patch("/user/:username/update-biography", checkUser, updateBiography);
 route.patch("/user/:username/update-socials", checkUser, updateSocialAccounts);
 route.delete("/user/delete-user", checkUser, deleteUser);
 
-getEventAttenders
+
 // Event route handler
+route.post("/event/get-requested-events",checkUser,getRequestedEvents)
+route.post("/event/accept-attender",checkUser,acceptAttender);
+route.delete("/event/reject-attender",checkUser,rejectAttender);
+route.get("/event/get-event-attenders",checkUser,getEventAttenders);
+route.post("/event/attend-to-event",checkUser,attendToEvent);
 route.get("/event/user-online-events",checkUser,getUserOnlineEvents);
 route.get("/event/user-physical-events",checkUser,getUserPhysicalEvents);
 route.get("/event/user-events",checkUser,getUserEvents);

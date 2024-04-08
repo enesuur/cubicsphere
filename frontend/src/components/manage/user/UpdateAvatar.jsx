@@ -78,7 +78,7 @@ export default function UpdateAvatar() {
 
   return (
     <form onSubmit={handleFormSubmit} encType="multipart/form-data">
-      <h2>Update Avatar</h2>
+      <h2>Update Avatar 📸</h2>
       <label className="profile-avatar-container">
         <img
           id="avatar-photo"

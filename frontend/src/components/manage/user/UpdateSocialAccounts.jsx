@@ -54,7 +54,7 @@ export default function UpdateSocialAccounts() {
 
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Update Social Accounts</h2>
+      <h2>Update Social Accounts 📱</h2>
       <label htmlFor="twitter">
         Twitter
         <input

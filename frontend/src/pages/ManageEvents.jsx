@@ -3,8 +3,10 @@ import CreateOnlineEvent from "../components/manage/event/CreateOnlineEvent";
 import "./ManageEvents.css";
 import CreatePhsyicalEvent from "../components/manage/event/CreatePhysicalEvent";
 import UpdateOnlineEvent from "../components/manage/event/UpdateOnlineEvent";
+import AttendRequests from "../components/manage/event/AttendRequest";
 import UpdatePhysicalEvent from "../components/manage/event/UpdatePhysicalEvent";
 import DeleteEvent from "../components/manage/event/DeleteEvent";
+import MyEvents from "../components/manage/event/MyEvents";
 
 
 export default function ManageEvents() {
@@ -35,6 +37,9 @@ export default function ManageEvents() {
             <li onClick={() => handleEndpointSelection("attend")}>
               Attend Requests
             </li>
+            <li onClick={() => handleEndpointSelection("events")}>
+              Your events
+            </li>
             <li onClick={() => handleEndpointSelection("delete-event")}>
               Delete an Event
             </li>
@@ -45,6 +50,8 @@ export default function ManageEvents() {
             {endPoint === "online" && <CreateOnlineEvent />}
             {endPoint === "update-online" && <UpdateOnlineEvent />}
             {endPoint === "update-physical" && <UpdatePhysicalEvent />}
+            {endPoint === "attend" && <AttendRequests/>}
+            {endPoint === "events" && <MyEvents />}
             {endPoint === "delete-event" && <DeleteEvent />}
 
           </div>

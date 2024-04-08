@@ -110,7 +110,7 @@
   font-weight: 300;
 }
 
-.btn-navigate {
+.btn-navigate:hover{
 background-color: var(--primary-darker-color);
 }
 

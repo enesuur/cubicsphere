@@ -51,7 +51,7 @@ export default function UpdatePassword() {
   }
   return (
     <form onSubmit={handleFormSubmit}>
-      <h2>Update Password</h2>
+      <h2>Update Password 🔐</h2>
       <label htmlFor="password">
         Password
         <input

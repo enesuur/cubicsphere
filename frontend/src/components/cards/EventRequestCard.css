@@ -1,0 +1,45 @@
+.event-request-card {
+    font-family: "Manrope",sans-serif;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--box-shadow);
+    border-radius: 4px;
+    padding: 12px 16px;
+    gap: 24px;
+  }
+  
+  .event-request-card figure {
+    margin-right: 20px;
+  }
+  
+  .event-request-card img {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .event-info {
+    flex-grow: 1;
+  }
+  
+  .event-info p {
+
+    margin-bottom: 8px;
+  }
+  
+  .event-info span {
+
+    margin-right: 5px;
+  }
+  
+  .event-info a {
+    color: #283593;
+    text-decoration: none;
+  }
+  
+  .event-info a:hover {
+    text-decoration: underline;
+  }
+  

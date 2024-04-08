@@ -190,6 +190,36 @@ section .manage-events .manage-events-dashboard form .btn-submit {
   }
 }
 
+.event-attenders {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.toggle-requests{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 24px;
+}
+
+.toggle-requests .toggle-req-item{
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  font-size: .99rem;
+  padding: 12px 16px ;
+  border-radius: 4px;
+}
+
+.toggle-request-title {
+  font-family: "Raleway",sans-serif;
+  font-weight: 300;
+  font-size: .99rem;
+  text-align: center;
+}
+
+
+
 
 @media only screen and (max-width: 768px) {
 

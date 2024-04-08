@@ -48,6 +48,18 @@ const eventSchema = mongoose.Schema(
       type: Number,
       required: false
     },
+    attendRequests: [
+      {
+        user: {
+          type: mongoose.Schema.ObjectId,
+          required: false
+        },
+        status: {
+          type: String,
+          required: false
+        }
+      }
+    ],
     attendants: [
       {
         type: mongoose.Schema.ObjectId,

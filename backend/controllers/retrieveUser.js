@@ -1,9 +1,10 @@
 async function retrieveUser(req, res) {
   try {
-    const {username,name,lastname,email,residency,role,birthday,biography,events,profileImgUrl} = res.locals.user;
+    const {_id,username,name,lastname,email,residency,role,birthday,biography,events,profileImgUrl,eventRequests} = res.locals.user;
     console.log();
     return res.status(200).send({
       user: {
+        _id,
         username,
         name,
         lastname,
@@ -13,7 +14,8 @@ async function retrieveUser(req, res) {
         biography,
         role,
         events,
-        profileImgUrl
+        profileImgUrl,
+        eventRequests
       }
     });
     

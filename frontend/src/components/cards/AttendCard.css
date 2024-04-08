@@ -1,0 +1,65 @@
+.attend-wrapper {
+  font-family: "Manrope", sans-serif;
+  box-shadow: var(--box-shadow);
+  font-weight: 300;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease-in-out;
+  padding: 12px;
+}
+
+.attend-wrapper .attend-card {
+  gap: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.attend-wrapper .attend-card figure {
+  margin-right: 16px;
+}
+
+.attend-wrapper .attend-card figure img {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.attend-wrapper .attend-card-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  row-gap: 4px;
+}
+.attend-wrapper .attend-card-details p {
+}
+
+.attend-wrapper .attend-card-details p a {
+  color: #283593;
+}
+
+.attend-btn-container {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+
+.btn-request {
+  background-color: var(--primary-color);
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--white);
+  padding: 12px 16px;
+  transition: background-color 0.3s ease-in-out;
+  text-align: center;
+  width: 96px;
+  display: block;
+  font-weight: 300;
+}
+
+.btn-request:hover {
+  background-color: var(--primary-darker-color);
+}
