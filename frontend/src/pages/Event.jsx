@@ -3,17 +3,19 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import "./Event.css";
 import AuthContext from "../context/AuthContext";
+import MapViewer from "../components/MapViewer";
 export default function Event() {
   const [eventData, setEventData] = useState({});
   const [organizer, setOrganizer] = useState("");
   const [latestAttendees, setLatestAttendees] = useState([]);
   const [attendCount, setAttendCount] = useState(0);
-  const [imageUrl, setImageUrl] = useState("");
   const [message, setMessage] = useState("");
   const [btnText, setBtnText] = useState("");
+  const [address,setAddress] = useState(null);
   const { slug } = useParams();
-
   const { user } = useContext(AuthContext);
+
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const day = date.getDay();
@@ -27,6 +29,7 @@ export default function Event() {
   const formattedStartDate = formatDate(eventData.startDate);
   const formattedDueDate = formatDate(eventData.dueDate);
   const publishedDay = formatDate(eventData.createdAt);
+
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/event/${slug}`, {
       method: "GET",
@@ -37,6 +40,8 @@ export default function Event() {
           const data = await response.json();
           setEventData(data.event);
           setOrganizer(data.event.organizer);
+          setAddress(`${data.event.address} ` + `${data.event.city} `+`${data.event.country}`);
+          console.log(address);
           setMessage(data.message);
         }
         if (response.status === 404 || response.status === 400) {
@@ -50,18 +55,17 @@ export default function Event() {
   }, []);
 
   useEffect(() => {
-    console.log(user)
     const result = eventData.attendRequests?.some((item) => {
-      console.log(eventData.attendRequests)
       return item.user === user._id;
     });
-  
+
     if (result) {
       setBtnText("Pending");
     } else {
       setBtnText("Attend Event");
     }
-  }),[];
+  }),
+    [];
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/user/find-user-by-id", {
@@ -121,27 +125,7 @@ export default function Event() {
       });
   }, [eventData]);
 
-  useEffect(() => {
-    if (eventData._id) {
-      fetch(`http://127.0.0.1:5000/event/img/${eventData._id}`)
-        .then(async (response) => {
-          if (response.status === 200) {
-            const blob = await response.blob();
-            setImageUrl(URL.createObjectURL(blob));
-          }
-          if (response.status === 404 || response.status === 400) {
-            const data = await response.json();
-            setMessage(data.message);
-          }
-        })
-        .catch((error) => {
-          console.error(
-            "There has been a problem with your fetch operation:",
-            error
-          );
-        });
-    }
-  }, [eventData]);
+
 
   function HTMLRenderer({ htmlContent }) {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
@@ -189,6 +173,8 @@ export default function Event() {
     }
   }
 
+  console.log(eventData)
+
   function handleAttendRequest(e) {
     e.preventDefault();
     fetch("http://127.0.0.1:5000/event/attend-to-event", {
@@ -225,6 +211,7 @@ export default function Event() {
       });
   }
 
+  
   return (
     <>
       <section>
@@ -250,7 +237,7 @@ export default function Event() {
 
             <figure>
               <picture>
-                <img src={`${imageUrl}`} alt="Event Image" loading="lazy" />
+                <img src={`http://127.0.0.1:5000/event/img/${eventData._id}`} alt="Event Image" loading="lazy" />
                 <figcaption>Caption:{eventData.title} Cover Image</figcaption>
               </picture>
             </figure>
@@ -296,12 +283,15 @@ export default function Event() {
                 className="event-page-title"
                 style={{ fontSize: "1.5rem", margin: "24px 0 24px 0" }}
               >
-                🧑Attenders
+                🧑Recent Attenders
               </h2>
-              <p>Last 5 attenders</p>
-              {latestAttendees.map((attender, idx) => (
-                <span key={idx}>-{attender.username}</span>
-              ))}
+              {latestAttendees.length === 0 ? (
+                <p>No one has joined yet!</p>
+              ) : (
+                latestAttendees.map((attender, idx) => (
+                  <span key={idx}>-{attender.username}</span>
+                ))
+              )}
             </div>
 
             <div className="event-page-organizer">
@@ -313,6 +303,19 @@ export default function Event() {
               </h2>
               <p>Organizer:{organizer}</p>
             </div>
+
+            {!eventData.isOnline && (
+              <>
+                <h2
+                  className="event-page-title"
+                  style={{ fontSize: "1.5rem", margin: "24px 0 24px 0" }}
+                >
+                  📌 Event Location
+                </h2>
+
+                {address && ( <MapViewer eventAddress={address}/> )}
+              </>
+            )}
             <button className="btn-attend" onClick={handleAttendRequest}>
               {btnText}
             </button>

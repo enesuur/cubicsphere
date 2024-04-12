@@ -1,4 +1,3 @@
-import axios from "axios";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useState } from "react";
 import "./Register.css";

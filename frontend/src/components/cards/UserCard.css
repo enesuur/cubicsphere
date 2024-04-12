@@ -1,42 +1,44 @@
-.event-request-card {
+.user-card {
   font-family: "Manrope", sans-serif;
-  font-weight: 300;
   display: flex;
   align-items: center;
-  box-shadow: var(--box-shadow);
   border-radius: 4px;
+  box-shadow: var(--box-shadow);
   padding: 12px 16px;
   gap: 24px;
 }
 
-.event-request-card figure {
-  margin-right: 20px;
+.user-card figure {
+  height: 100%;
 }
 
-.event-request-card img {
+.user-card img {
   width: 128px;
   height: 128px;
   object-fit: cover;
   border-radius: 4px;
 }
 
-.event-info {
-  flex-grow: 1;
+.user-info {
+  flex: 1;
 }
 
-.event-info p {
+.user-info p {
   margin-bottom: 8px;
 }
 
-.event-info span {
+.user-info p span:first-child {
+}
+
+.user-info p span:last-child {
   margin-right: 5px;
 }
 
-.event-info a {
+.user-info p:last-child span:last-child {
   color: #283593;
   text-decoration: none;
 }
 
-.event-info a:hover {
+.user-info p:last-child span:last-child:hover {
   text-decoration: underline;
 }

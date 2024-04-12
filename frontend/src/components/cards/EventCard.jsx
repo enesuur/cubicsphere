@@ -53,7 +53,6 @@ export default function EventCard({ eventObj }) {
     navigate(`/event/${eventObj.slug}`);
 
   }
-  console.log(eventObj);
   const formattedStartDate = formatDate(eventObj.startDate);
   const formattedDueDate = formatDate(eventObj.dueDate);
   return (

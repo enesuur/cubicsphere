@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "./Profile.css";
 
-
 function HTMLRenderer({ htmlContent }) {
   return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
 }
@@ -15,7 +14,7 @@ function HTMLRenderer({ htmlContent }) {
 export default function Profile() {
   let { username } = useParams();
   const [user, setUser] = useState({
-    name:"",
+    name: "",
     lastname: "",
     username: "",
     twitter: "",
@@ -27,6 +26,7 @@ export default function Profile() {
     biography: "",
     birthday: "",
     profileImgUrl: "",
+    residency: {},
   });
   const [message, setMessage] = useState("");
 
@@ -37,24 +37,34 @@ export default function Profile() {
         "Content-Type": "application/json",
       },
       credentials: "include",
-    }).then(async (response ) => {
-      const data = await response.json();
-      const { user } = data; 
-      setUser({
-        name: user.name || "",
-        lastname: user.lastname || "",
-        username: user.username || "",
-        twitter: user.twitter || "",
-        instagram: user.instagram || "",
-        snapchat: user.snapchat || "",
-        joinedAt: user.joinedAt || 0,
-        organized: user.organized || 0,
-        attendance: user.attendance || 0,
-        biography: user.biography || "",
-        birthday: user.birthday || "",
-        profileImgUrl: user.profileImgUrl || "",
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        const { user } = data;
+        console.log(user);
+        setUser((prevUser) => ({
+          ...prevUser,
+          name: user.name || "",
+          lastname: user.lastname || "",
+          username: user.username || "",
+          twitter: user.twitter || "",
+          instagram: user.instagram || "",
+          snapchat: user.snapchat || "",
+          joinedAt: user.joinedAt || 0,
+          biography: user.biography || "",
+          birthday: user.birthday || "",
+          profileImgUrl: user.profileImgUrl || "",
+          organized: user.events?.length || 0,
+          residency: user.residency,
+          attendance:
+            user.eventRequests?.filter((item) => item.status === "accepted")
+              .length || 0,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        setMessage(error.message);
       });
-    });
   }, []);
 
   useEffect(() => {
@@ -83,58 +93,75 @@ export default function Profile() {
 
   return (
     <>
-        <section className="profile container">
-          <div className="profile-showcase">
-            <div className="profile-banner">
-              <img src={Banner} alt="profile banner" />
-            </div>
-            <div className="profile-avatar">
-              <img src={`http://127.0.0.1:5000/user/${user.username}/avatar`} alt="avatar" loading="lazy" />
-              <div className="profile-username">
-                <span>{user.name} {user.lastname}</span>
-                <Link to={"/"}>@{user.username}</Link>
-              </div>
+      <section className="profile container">
+        <div className="profile-showcase">
+          <div className="profile-banner">
+            <img src={Banner} alt="profile banner" />
+          </div>
+          <div className="profile-avatar">
+            <img
+              src={`http://127.0.0.1:5000/user/${user.username}/avatar`}
+              alt="avatar"
+              loading="lazy"
+            />
+            <div className="profile-username">
+              <span>
+                {user.name &&
+                  user.lastname &&
+                  `${user.name.charAt(0).toUpperCase()}${user.name.slice(
+                    1
+                  )} ${user.lastname
+                    .charAt(0)
+                    .toUpperCase()}${user.lastname.slice(1)}`}
+              </span>
+              <Link to={`/profile/${user.username}`}>@{user.username}</Link>
             </div>
           </div>
-          <div className="profile-info">
-            <div className="profile-social">
-              <div>
-                <FiTwitter />
-                <span>{user.twitter}</span>
-              </div>
-              <div>
-                <BsSnapchat />
-                <span>{user.snapchat}</span>
-              </div>
-              <div>
-                <AiOutlineInstagram />
-                <span>{user.instagram}</span>
-              </div>
+        </div>
+        <div className="profile-info">
+          <div className="profile-social">
+            <div>
+              <FiTwitter />
+              <span>{user.twitter}</span>
             </div>
-            <div className="profile-stats">
-              <div>
-                <span>Joined At</span>
-                <span>{user.joinedAt}</span>
-              </div>
-              <div>
-                <span>Organized</span>
-                <span>{user.organized}</span>
-              </div>
-              <div>
-                <span>Attendance</span>
-                <span>{user.attendance}</span>
-              </div>
+            <div>
+              <BsSnapchat />
+              <span>{user.snapchat}</span>
+            </div>
+            <div>
+              <AiOutlineInstagram />
+              <span>{user.instagram}</span>
             </div>
           </div>
-        </section>
+          <div className="profile-stats">
+            <div>
+              <span>Joined At</span>
+              <span>{user.joinedAt}</span>
+            </div>
+            <div>
+              <span>Organized</span>
+              <span>{user.organized}</span>
+            </div>
+            <div>
+              <span>Attendance</span>
+              <span>{user.attendance}</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <section className="profile-biography container">
-          <article>
-            <h2>Biography</h2>
-            <HTMLRenderer htmlContent={user.biography} />
-            {message}
-          </article>
-        </section>
+      <section className="profile-biography container">
+        <article>
+          <h2>Biography ✍🏻</h2>
+          <HTMLRenderer htmlContent={user.biography} />
+
+          <h2>Residency 📍</h2>
+          {user?.residency
+            ? user.residency.city + ", " + user.residency.country
+            : "No residency information."}
+          {message}
+        </article>
+      </section>
     </>
   );
 }

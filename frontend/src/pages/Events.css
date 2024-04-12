@@ -14,7 +14,7 @@ section .events-dashboard {
 }
 
 section .events-dashboard .events-aside {
-  max-height: 768px;
+  max-height: 1024px;
   display: flex;
   flex-direction: column;
   border-radius: 4px;
@@ -127,4 +127,15 @@ section .events-dashboard .events input[type="text"] {
 
 section .events-dashboard .events input[type="text"]:focus {
   box-shadow: var(--box-shadow-hover);
+}
+
+.event-type-filter {
+  display: flex !important;
+  align-items: center !important;
+  column-gap: 8px !important;
+  margin-bottom: 0 !important;  
+}
+
+.event-type-filter input[type="radio"] {
+  font-size: 60px;
 }
