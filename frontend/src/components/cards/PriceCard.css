@@ -9,10 +9,11 @@
   align-items: center;
   max-height: 768px;
   row-gap: 12px;
+  transition: transform 0.1s ease-in-out;
 }
 
 .price-card:hover {
-  box-shadow: var(--box-shadow-hover);
+  transform: scale(1.1);
 }
 
 .price-card article {
@@ -86,6 +87,28 @@ price-card .btn-pricing:hover {
   .price-card article p {
     padding: 4px;
     width: 200px;
+    margin: auto;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .price-card {
+    height: 100%;
+  }
+
+  .price-card article h3 {
+    font-size: 1.5rem;
+  }
+
+  .price-card article {
+    width: 100%;
+  }
+
+  .price-card article p {
+    padding: 2px;
+    width: 100%;
+    max-width: 200px;
     margin: auto;
   }
 }

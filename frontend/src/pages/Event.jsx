@@ -312,7 +312,6 @@ export default function Event() {
                 >
                   📌 Event Location
                 </h2>
-
                 {address && ( <MapViewer eventAddress={address}/> )}
               </>
             )}

@@ -54,7 +54,7 @@ export default function AttendRequests() {
         <h2 className="event-form-header">{message} 🤕</h2>
       )}
       <div className="event-attenders">
-        <h2 className="event-form-header">Attend Requests 🚩</h2>
+        <h2 className="event-form-header">Manage Requests 🚩</h2>
         <ul className="toggle-requests">
           <li
             onClick={() => handleStatusChange("pending")}

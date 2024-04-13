@@ -4,17 +4,17 @@ section .event-page {
     border-radius: 4px;
     padding: 32px;
     box-shadow: var(--box-shadow);
-    font-family: "Manrope",sans-serif;
+    font-family: "Manrope", sans-serif;
 }
 
 section .event-header {
     display: flex;
     flex-direction: column;
-    margin: 24px 0 24px 0;
+    margin: 24px 0;
 }
 
 .event-page-title {
-    font-family: "Raleway",sans-serif;
+    font-family: "Raleway", sans-serif;
     font-size: 2.5rem;
     font-weight: 300;
     border-bottom: 0.01px solid rgba(128, 128, 128, 0.5);
@@ -24,11 +24,11 @@ section .event-header .event-publish-date {
     display: flex;
     align-items: center;
     column-gap: 4px;
-    font-family: "Manrope",sans-serif;
+    font-family: "Manrope", sans-serif;
     font-size: .825rem;
     font-weight: 200;
     color: var(--gray-color);
-    margin: 16px 0 16px 0;
+    margin: 16px 0;
 }
 
 section .event-header .event-publish-date svg {
@@ -43,7 +43,6 @@ section .event-header figure {
     border-radius: 4px;
     overflow: hidden;
     background-color: var(--background-color);
-
 }
 
 section .event-header figure picture {
@@ -54,10 +53,10 @@ section .event-header figure picture {
 }
 
 section .event-header figure figcaption {
-    font-family: "Manrope",sans-serif;
+    font-family: "Manrope", sans-serif;
     text-align: center;
     font-size: 0.825rem;
-    margin: 12px 0 12px 0;
+    margin: 12px 0;
 }
 
 section .event-header figure img {
@@ -69,7 +68,10 @@ section .event-header figure img {
 }
 
 .btn-attend {
-    margin: 24px 0 24px 0;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    margin-left: auto;
+
     background-color: var(--primary-color);
     cursor: pointer;
     border-radius: 4px;
@@ -80,17 +82,54 @@ section .event-header figure img {
     width: 256px;
     display: block;
     font-weight: 300;
-    margin-left: auto;
-  }
-  
-  .btn-attend:hover {
+}
+
+.btn-attend:hover {
     background-color: var(--primary-darker-color);
-  }
-  
+}
 
 section .event-footer .event-location,
 section .event-footer .event-attendars,
-section .event-footer .event-page-organizer{
-    font-family: "Manrope",sans-serif;
+section .event-footer .event-page-organizer {
+    font-family: "Manrope", sans-serif;
     font-size: 0.99rem;
+}
+
+/* Media Queries */
+@media only screen and (max-width: 768px) {
+    section .event-page {
+        padding: 20px;
+    }
+
+    .event-page-title {
+        font-size: 2rem;
+    }
+
+    section .event-header figure img {
+        height: auto;
+    }
+
+    .btn-attend {
+        max-width: 200px;
+        margin-left: auto;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    section .event-page {
+        padding: 16px;
+    }
+
+    .event-page-title {
+        font-size: 1.8rem;
+    }
+
+    section .event-header figure img {
+        height: auto;
+    }
+
+    .btn-attend {
+        width: 100%;
+        max-width: 180px;
+    }
 }

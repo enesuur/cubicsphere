@@ -28,6 +28,7 @@ export default function MyEvents(){
     return(
         <>
         <div className="events">
+          <h2 className="event-form-header" style={{margin:"8px 0 8px 0"}}>MyEvents 🎫</h2>
             {userEvents.length > 0 &&
               userEvents.map((eventObj, key) => {
                 return (

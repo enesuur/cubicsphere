@@ -13,7 +13,10 @@ export default function MapViewer({eventAddress}) {
     });
     console.log(address);
 
-    const center = useMemo(() => ({ lat: coordinates.lat, lng:coordinates.lng }), []);
+    const center = {
+        lat: 41.015137,
+        lng:28.979530,
+    };
 
     useEffect(() => {
         if (isLoaded && !loadError) {
@@ -27,6 +30,7 @@ export default function MapViewer({eventAddress}) {
                                 lat: Number(results[0].geometry.location.lat()),
                                 lng: Number(results[0].geometry.location.lng())
                             })
+
                         } else {
                             console.error("No results found.");
                         }
@@ -39,6 +43,8 @@ export default function MapViewer({eventAddress}) {
         }
     }, [isLoaded, loadError,eventAddress]);
 
+    useEffect
+
 
     function handleMarkerClick(){
         setIsOpen(true);
@@ -49,26 +55,32 @@ export default function MapViewer({eventAddress}) {
 
     return (
         <div className="map-wrapper">
-            <GoogleMap
-                mapContainerClassName="map-container"
-                center={center}
-                zoom={17}
-            >
-                <Marker 
-                    position={{ lat: coordinates.lat, lng: coordinates.lng }}
-                    onClick={() => handleMarkerClick()}
-                />
-                {isOpen && infoWindowData && (
-                    <InfoWindow
-                        onCloseClick={() => setIsOpen(false)}
+            {Object.keys(coordinates).length === 0 ? (
+                <div>
+                    Map is loading...
+                </div>
+            ) : (
+                <GoogleMap
+                    mapContainerClassName="map-container"
+                    center={{ lat: coordinates.lat, lng: coordinates.lng }}
+                    zoom={17}
+                >
+                    <Marker
                         position={{ lat: coordinates.lat, lng: coordinates.lng }}
-                    >
-                        <div>
-                            <h3>{infoWindowData.address}</h3>
-                        </div>
-                    </InfoWindow>
-                )}
-            </GoogleMap>
+                        onClick={() => handleMarkerClick()}
+                    />
+                    {isOpen && infoWindowData && (
+                        <InfoWindow
+                            onCloseClick={() => setIsOpen(false)}
+                            position={{ lat: coordinates.lat, lng: coordinates.lng }}
+                        >
+                            <div>
+                                <h3>{infoWindowData.address}</h3>
+                            </div>
+                        </InfoWindow>
+                    )}
+                </GoogleMap>
+            )}
         </div>
     );
 }

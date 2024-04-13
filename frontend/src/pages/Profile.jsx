@@ -122,15 +122,15 @@ export default function Profile() {
           <div className="profile-social">
             <div>
               <FiTwitter />
-              <span>{user.twitter}</span>
+              <span><a href={`https://x.com/${user.twitter}`} target="_blank">{user.twitter}</a></span>
             </div>
             <div>
               <BsSnapchat />
-              <span>{user.snapchat}</span>
+              <span><a href={`https://snapchat.com/${user.snapchat}`} target="_blank">{user.twitter}</a></span>
             </div>
             <div>
               <AiOutlineInstagram />
-              <span>{user.instagram}</span>
+              <span><a href={`https://instagram.com/${user.instagram}`} target="_blank">{user.twitter}</a></span>
             </div>
           </div>
           <div className="profile-stats">

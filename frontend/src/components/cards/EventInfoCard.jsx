@@ -39,30 +39,30 @@ export default function EventInfoCard({
       </div>
       <div className="event-info-details">
         <p>
-          <span>Category:{eventObj.category}</span>
+          <span>🗂️Category:{eventObj.category}</span>
         </p>
         <p>
-          <span>Title: {eventObj.title}</span>
+          <span>👉Title: {eventObj.title}</span>
         </p>
         <p>
-          <span>Snippet:{snippet}...</span>
+          <span>🧩Snippet:{snippet}...</span>
         </p>
         <p>
-          <span>Start Date:{formattedStartDate}</span>
+          <span>📅Start Date:{formattedStartDate}</span>
         </p>
         <p>
-          <span>Due Date:{formattedDueDate}</span>
+          <span>📅Due Date:{formattedDueDate}</span>
         </p>
         <p>
-          <span>Quota:{eventObj.quota}</span>
+          <span>🔢Quota:{eventObj.quota}</span>
         </p>
         {!eventObj.isOnline && (
           <>
             <p>
-              <span>City:{eventObj.city}</span>
+              <span>🏘️City:{eventObj.city}</span>
             </p>
             <p>
-              <span>Country:{eventObj.country}</span>
+              <span>🌎Country:{eventObj.country}</span>
             </p>
           </>
         )}

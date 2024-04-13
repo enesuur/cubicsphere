@@ -124,22 +124,21 @@ section .manage-events .manage-events-dashboard form label input[type="file"] {
   width: 100%;
 }
 
-
 section .manage-events .manage-events-dashboard form input[type="date"]:focus {
   box-shadow: var(--box-shadow-hover);
 }
 
 section .manage-events .manage-events-dashboard form .btn-submit {
-    background-color: var(--primary-color);
-    cursor: pointer;
-    border-radius: 4px;
-    color: var(--white);
-    padding: 12px 16px;
-    transition: background-color 0.3s ease-in-out; 
-    text-align: center;
-    width: 100%;
-    display: block;
-    font-weight: 300;
+  background-color: var(--primary-color);
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--white);
+  padding: 12px 16px;
+  transition: background-color 0.3s ease-in-out;
+  text-align: center;
+  width: 100%;
+  display: block;
+  font-weight: 300;
 }
 
 section .manage-events .manage-events-dashboard form .btn-submit {
@@ -151,7 +150,7 @@ section .manage-events .manage-events-dashboard form .btn-submit {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 32px;
-  padding: 12 16px;
+  padding: 12px 16px;
 }
 
 .event-form-header,
@@ -182,6 +181,13 @@ section .manage-events .manage-events-dashboard form .btn-submit {
   background-color: var(--primary-darker-color);
 }
 
+.events {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 12px;
+}
+
 @media only screen and (max-width: 768px) {
   .update-online-event,
   .delete-events {
@@ -193,36 +199,33 @@ section .manage-events .manage-events-dashboard form .btn-submit {
 .event-attenders {
   display: flex;
   flex-direction: column;
-  row-gap: 24px;
+  row-gap: 32px;
 }
 
-.toggle-requests{
+.toggle-requests {
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 24px;
 }
 
-.toggle-requests .toggle-req-item{
+.toggle-requests .toggle-req-item {
   box-shadow: var(--box-shadow);
   cursor: pointer;
-  font-size: .99rem;
-  padding: 12px 16px ;
+  font-size: 0.99rem;
+  padding: 12px;
   border-radius: 4px;
 }
 
 .toggle-request-title {
-  font-family: "Raleway",sans-serif;
+  margin: 8px 0 8px 0;
+  font-family: "Raleway", sans-serif;
   font-weight: 300;
-  font-size: .99rem;
+  font-size: 0.99rem;
   text-align: center;
 }
 
-
-
-
 @media only screen and (max-width: 768px) {
-
   .manage-events {
     flex-direction: column;
   }
@@ -233,7 +236,35 @@ section .manage-events .manage-events-dashboard form .btn-submit {
     padding: 0 8px;
   }
 
-  section .manage-events .manage-events-dashboard form label input[type="date"] {
+  .toggle-requests {
+    flex-direction: column;
+  }
+  .toggle-requests .toggle-req-item {
+    width: 100%;
+    text-align: center;
+  }
+
+  .attend-wrapper .attend-card {
+    flex-direction: column;
+    font-size: 0.825rem;
+  }
+
+  .attend-btn-container .btn-request {
+    padding: 4px;
+  }
+
+  .attend-wrapper .attend-btn-container {
+    margin: 16px 0 16px 0;
+    justify-content: center;
+    column-gap: 16px;
+  }
+
+  section
+    .manage-events
+    .manage-events-dashboard
+    form
+    label
+    input[type="date"] {
     width: 100%;
   }
 
@@ -249,7 +280,7 @@ section .manage-events .manage-events-dashboard form .btn-submit {
   }
 }
 
-@media only screen and (min-width: 768px) and (max-width:1024px) {
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
   .update-online-event,
   .delete-events {
     display: grid;
@@ -257,5 +288,18 @@ section .manage-events .manage-events-dashboard form .btn-submit {
     gap: 32px;
     margin-bottom: 24px;
     padding: 0 24px;
+  }
+
+  .attend-wrapper .attend-card {
+    font-size: 0.92rem;
+  }
+  .event-attenders {
+    row-gap: 16px;
+  }
+
+  .attend-btn-container .btn-request {
+    font-size: 0.92rem;
+    margin: 12px 0 12px 0;
+    padding: 8px;
   }
 }

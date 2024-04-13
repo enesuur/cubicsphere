@@ -35,7 +35,7 @@ export default function ManageEvents() {
               Update an online Event
             </li>
             <li onClick={() => handleEndpointSelection("attend")}>
-              Attend Requests
+              Manage Requests
             </li>
             <li onClick={() => handleEndpointSelection("events")}>
               Your events

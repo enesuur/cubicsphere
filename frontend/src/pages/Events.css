@@ -137,5 +137,47 @@ section .events-dashboard .events input[type="text"]:focus {
 }
 
 .event-type-filter input[type="radio"] {
-  font-size: 60px;
+  font-size: .99rem;
+}
+
+@media only screen and (max-width: 768px) {
+  section .events-dashboard {
+    flex-direction: column;
+    row-gap: 32px;
+  }
+
+  section .events-dashboard .events-aside {
+    max-height: none;
+  }
+
+  section .events-dashboard .events {
+    row-gap: 32px;
+  }
+
+  section .events-dashboard .events input[type="text"] {
+    padding: 8px;
+  }
+
+  .event-type-filter input[type="radio"] {
+    font-size: 0.85rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  section .events-header {
+    font-size: 1.2rem;
+  }
+
+  section .events-dashboard .events-aside h3 {
+    font-size: 16px;
+  }
+
+  section .events-dashboard .events-aside input[type="date"] {
+    padding: 6px;
+  }
+
+  select,
+  .btn-search {
+    padding: 6px;
+  }
 }
