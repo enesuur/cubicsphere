@@ -7,6 +7,7 @@ const { measureMemory } = require("vm");
 async function createPhysicalEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, address, city, state, country, category } = req.body;
+    console.log(category,1)
     if (
       !title ||
       !description ||
@@ -326,16 +327,6 @@ async function getEventsByCategory(req, res) {
   }
 }
 
-async function getEventsByLocation(req, res) {
-  try {
-    const { address, city, state, country } = req.query;
-    //
-  } catch (error) {
-    console.log(error, error.message);
-    return res.status(500).json({ message: "Internal server error." });
-  }
-}
-
 async function getEventImage(req, res) {
   try {
     if (!req.params.eventId) {
@@ -363,43 +354,71 @@ async function getEventImage(req, res) {
 
 async function getFilteredEvents(req, res) {
   try {
-    const { address, city, state, country, isOnline, quota, category } = req.query;
-    if (address || city || state || country || isOnline || quota || category) {
-      const filter = {};
-      if (address) {
-        filter.address = address;
-      }
-      if (city) {
-        filter.city = city;
-      }
-      if (state) {
-        filter.state = state;
-      }
-      if (country) {
-        filter.country = country;
-      }
-      if (isOnline) {
-        filter.isOnline = isOnline === "true";
-      }
-      if (quota) {
-        filter.quota = parseInt(quota);
-      }
-      if (category) {
-        filter.category = category;
-      }
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = 10;
+    const skip = (page - 1) * pageSize;
 
-      if (Object.keys(filter).length > 0) {
-        const events = await Event.find(filter);
-        if (events.length === 0) {
-          res.status(404).json({ message: "No events to show." });
-        }
-        return res.status(200).json({ events: events });
-      }
+    function handleRegexOperation(x) {
+      const letters = {
+        ı: "[ıIiİ]",
+        I: "[ıIiİ]",
+        i: "[ıIiİ]",
+        İ: "[ıIiİ]",
+        ş: "[şŞsS]",
+        ğ: "[ğgGĞ]",
+        G: "[ğgGĞ]",
+        ü: "[üuÜU]",
+        Ü: "[üuÜU]",
+        ö: "[öoÖO]",
+        Ö: "[öoÖO]"
+      };
+
+      return new RegExp(
+        x.replace(/[ıIiİşŞğGĞüÜöÖ]/gi, (match) => letters[match]),
+        "i"
+      );
     }
-    return res.status(400).json({ message: "No filter option provided." });
-  } catch (error) {
-    console.log(error, error.message);
-    return res.status(500).json({ message: "Internal server error." });
+
+    const query = {};
+
+    if (req.query.country) {
+      query.country = { $regex: handleRegexOperation(req.query.country) };
+    }
+
+    if (req.query.city) {
+      query.city = { $regex: handleRegexOperation(req.query.city) };
+    }
+
+    if (req.query.category) {
+      query.category = { $regex: handleRegexOperation(req.query.category) };
+    }
+    
+    if (req.query.isOnline) {
+      query.isOnline = req.query.isOnline === "true";
+    }
+
+    if (req.query.quota) {
+      query.quota = { $lte: parseInt(req.query.quota) };
+    }
+
+    const total = await Event.find(query).countDocuments();
+    const pages = Math.ceil(total / pageSize);
+
+    if (page > pages) {
+      return res.status(404).json({ message: "The page you are looking for does not exist."});
+    }
+
+    const data = await Event.find(query).limit(pageSize).skip(skip).exec();
+
+    res.status(200).json({
+      data,
+      count: data.length,
+      page,
+      pages,
+      message: "Events were retrieved!"
+    });
+  } catch (e) {
+    console.log(e);
   }
 }
 
@@ -428,7 +447,7 @@ async function getEventAttenders(req, res) {
       for (const attendRequest of userEvent.attendRequests) {
         attendRequestUsers.push({
           eventTitle: userEvent.title,
-          eventId:userEvent._id,
+          eventId: userEvent._id,
           eventSlug: userEvent.slug,
           user: attendRequest.user,
           status: attendRequest.status
@@ -473,7 +492,7 @@ async function acceptAttender(req, res) {
     if (!attenderId || !eventId) {
       return res.status(400).json("Fill all the fields.");
     }
-    const userEvents = await Event.find({ _id: eventId});
+    const userEvents = await Event.find({ _id: eventId });
 
     if (userEvents.length === 0) {
       return res.status(404).json({ message: "You don't have any events with provided ID." });
@@ -493,18 +512,18 @@ async function acceptAttender(req, res) {
 
     const attendent = await User.findById(attenderId);
 
-    if(!attendent){
+    if (!attendent) {
       return res.status(404).json({ message: "Attendent not found." });
     }
     attendent.eventRequests.forEach((request) => {
       if (request.event.toString() == eventId) {
-        request.status = "accepted"
+        request.status = "accepted";
       }
     });
     await attendent.save();
     await event.save();
 
-    return res.status(201).json({ message: "Attender accepted successfully"});
+    return res.status(201).json({ message: "Attender accepted successfully" });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
@@ -560,7 +579,7 @@ async function rejectAttender(req, res) {
   }
 }
 
-async function getRequestedEvents(req,res){
+async function getRequestedEvents(req, res) {
   try {
     const { eventIds } = req.body;
     const events = await Event.find({ _id: { $in: eventIds } });
@@ -573,7 +592,6 @@ async function getRequestedEvents(req,res){
     return res.status(505).json({ message: "Internal server error." });
   }
 }
-
 
 async function attendToEvent(req, res) {
   try {

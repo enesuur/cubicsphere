@@ -64,11 +64,14 @@ export default function UserRequests() {
   console.log(requestedEvents);
   return (
     <div className="requested-events">
-      <h2 style={{textAlign:"center"}}>Requested Events ✉️</h2>
-      {requestedEvents.length > 0 &&
+      <h2 style={{ textAlign: "center" }}>Requested Events ✉️</h2>
+      {requestedEvents.length > 0 ? (
         requestedEvents.map((item, idx) => (
           <EventRequestCard key={idx} eventObj={item} user={user} />
-        ))}
+        ))
+      ) : (
+        <p style={{textAlign:"center"}}>No requested events to show.. 🤕</p>
+      )}
     </div>
   );
 }

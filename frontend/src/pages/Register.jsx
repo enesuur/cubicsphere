@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./Register.css";
 import AuthContext from "../context/AuthContext";
 
@@ -22,6 +22,12 @@ export default function Register() {
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    if (authContext?.user?.username) {
+      navigate('/events');
+    }
+  }, [authContext.user]);
 
   function handleFormSubmit(event) {
     event.preventDefault();

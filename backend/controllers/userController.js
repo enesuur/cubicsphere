@@ -74,9 +74,11 @@ async function getUser(req, res) {
         biography: user.biography,
         role: user.role,
         birthday: user.birthday,
+        events: user.events,
         twitter: user.twitter,
         instagram: user.instagram,
         snapchat: user.snapchat,
+        residency: user.residency,
         eventRequests: user.eventRequests
       }
     });
@@ -217,7 +219,7 @@ async function updateSocialAccounts(req, res) {
     if (!updatedUser) {
       return res.status(400).json({ message: "User not found." });
     }
-    return res.status(201).json({ message: "Social Accounts were updated successfully." });
+    return res.status(201).json({ message: "Social accounts were updated successfully." });
   } catch (error) {
     console.error(error, error.message);
     console.log("Something went wrong on updateSocialAccounts");

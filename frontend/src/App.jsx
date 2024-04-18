@@ -15,6 +15,7 @@ import UserSettings from "./pages/UserSettings";
 import Event from "./pages/Event";
 import Events from "./pages/Events";
 import ManageEvents from "./pages/ManageEvents";
+import 'react-toastify/dist/ReactToastify.css';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>

@@ -1,6 +1,7 @@
 import {Link} from "react-router-dom";
 import "./UserCard.css";
 export default function UserCard({ user }) {
+  console.log(user);
   return (
     <div className="user-card">
       <figure>
@@ -28,7 +29,7 @@ export default function UserCard({ user }) {
         <p>
           <span>Profile:</span>
           <span>
-            <Link to={`/user/${user.slug}`}>Click for display</Link>
+            <Link to={`/user/${user.username}`}>Click for display</Link>
           </span>
         </p>
       </div>

@@ -34,7 +34,7 @@ export default function EventRequestCard({ user, eventObj }) {
           </p>
           <p>
             <span>Event URL:</span>
-            <span><Link to={`/event/${eventObj.slug}`}>Click for display</Link></span>
+            <span><Link to={`/event/${eventObj.slug}`} target="_blank">Click for display</Link></span>
           </p>
           <p>
             <span>Event quota:</span>

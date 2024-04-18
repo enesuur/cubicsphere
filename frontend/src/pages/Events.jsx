@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { ToastContainer, toast,Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import toastNotify from "../utils/toastNotify";
 import SearchBar from "../components/search/SearchBar";
 import EventCard from "../components/cards/EventCard";
 import UserCard from "../components/cards/UserCard";
@@ -29,7 +30,11 @@ export default function Events() {
           name: "Marmara Region",
           cities: ["İstanbul", "Bursa", "Çanakkale", "Kocaeli"],
         },
-      ],
+        {
+          name: "Ege Region",
+          cities: ["Muğla", "İzmir", "Denizli", "Uşak"],
+        },
+      ]
     },
     {
       name: "Germany",
@@ -78,53 +83,11 @@ export default function Events() {
     if (name === "category") {
       setSelectedCategory(value);
     }
-   
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  }
-
-  function notify(status, serverMessage) {
-    if (status === 200) {
-      toast.success(serverMessage, {
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 404 || status === 400) {
-      toast.warn(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 500) {
-      toast.error(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
   }
 
 
@@ -142,7 +105,6 @@ export default function Events() {
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
           setMessage(data.message);
-
         }
       })
       .catch((error) => {
@@ -152,29 +114,34 @@ export default function Events() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    fetch(`http://127.0.0.1:5000/event/filter-events?${new URLSearchParams(formData)}`, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      `http://127.0.0.1:5000/event/filter-events?${new URLSearchParams(
+        formData
+      )}`,
+      {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    })
+    )
       .then(async (response) => {
         if (response.status === 200) {
           const result = await response.json();
           setFilteredEvents(result.data);
-          setMessage(result.message)
-          notify(response.status, result.message);
+          setMessage(result.message);
+          toastNotify(response.status, result.message);
         }
         if (response.status === 404 || response.status === 400) {
           const result = await response.json();
-          setMessage(result.message)
-          notify(response.status, result.message);
+          setMessage(result.message);
+          toastNotify(response.status, result.message);
         }
       })
       .catch((error) => {
-        setMessage(error.message)
-        notify(500, error.message);
+        setMessage(error.message);
+        toastNotify(500, error.message);
       });
   }
   return (
@@ -190,9 +157,9 @@ export default function Events() {
                   <input
                     type="checkbox"
                     name="category"
-                    value="workshop"
+                    value="Social"
                     onChange={handleInputChange}
-                    checked={selectedCategory === "workshop"}
+                    checked={selectedCategory === "Social"}
                   />
                   Social
                 </label>
@@ -200,9 +167,9 @@ export default function Events() {
                   <input
                     type="checkbox"
                     name="category"
-                    value="conference"
+                    value="Conference"
                     onChange={handleInputChange}
-                    checked={selectedCategory === "conference"}
+                    checked={selectedCategory === "Conference"}
                   />
                   Conference
                 </label>
@@ -210,9 +177,9 @@ export default function Events() {
                   <input
                     type="checkbox"
                     name="category"
-                    value="webinar"
+                    value="Webinar"
                     onChange={handleInputChange}
-                    checked={selectedCategory === "webinar"}
+                    checked={selectedCategory === "Webinar"}
                   />
                   Webinar
                 </label>
@@ -220,9 +187,9 @@ export default function Events() {
                   <input
                     type="checkbox"
                     name="category"
-                    value="meetup"
+                    value="Meetup"
                     onChange={handleInputChange}
-                    checked={selectedCategory === "meetup"}
+                    checked={selectedCategory === "Meetup"}
                   />
                   Meetup
                 </label>
@@ -396,6 +363,14 @@ export default function Events() {
               latestEvents.map((eventObj, key) => {
                 return <EventCard key={key} eventObj={eventObj} />;
               })}
+
+            {filteredEvents.length === 0 &&
+              filteredUsers.length === 0 &&
+              latestEvents.length === 0 &&
+              <p style={{textAlign:"center"}}>
+                No events to show.. 🤕
+              </p>
+            }
           </div>
         </div>
       </section>

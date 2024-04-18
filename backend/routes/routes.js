@@ -19,7 +19,8 @@ const {
   attendToEvent,
   acceptAttender,
   rejectAttender,
-  getRequestedEvents
+  getRequestedEvents,
+  searchEvents
 }
 = require("../controllers/eventController");
 const {
@@ -75,8 +76,9 @@ route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImag
 route.put("/event/update-online-event", [checkUser,uploadImg.single("eventImage"),processImage], updateOnlineEvent);
 route.delete("/event/delete-event", checkUser, deleteEvent);
 route.get("/events/get-events-by-category", checkUser, getEventsByCategory);
-route.get("/events/filter-events", checkUser, getFilteredEvents);
+route.get("/event/filter-events", checkUser, getFilteredEvents);
 route.get("/event/:slug",checkUser,getEvent);
+
 
 
 // search route handler

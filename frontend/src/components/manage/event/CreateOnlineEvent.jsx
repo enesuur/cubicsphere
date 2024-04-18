@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactQuill from "react-quill";
-import { ToastContainer, toast,Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import toastNotify from "../../../utils/toastNotify";
 import "react-quill/dist/quill.snow.css";
 
 export default function CreateOnlineEvent() {
@@ -32,48 +33,6 @@ export default function CreateOnlineEvent() {
     }));
   }
 
-  function notify(status, serverMessage) {
-    if (status === 201) {
-      toast.success(serverMessage, {
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 404 || status === 400) {
-      toast.warn(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 500) {
-      toast.error(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  }
-
   function handleFileChange(event) {
     setFile(event.target.files[0]);
     setFileUrl(URL.createObjectURL(event.target.files[0]));
@@ -103,17 +62,17 @@ export default function CreateOnlineEvent() {
         if (response.status === 201) {
           const data = await response.json();
           setMessage(data.message);
-          notify(response.status, data.message);
+          toastNotify(response.status, data.message);
         }
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
           setMessage(data.message);
-          notify(response.status, data.message);
+          toastNotify(response.status, data.message);
         }
       })
       .catch((error) => {
         setMessage(data.message);
-        notify(error, data.message);
+        toastNotify(500, data.message);
       });
   }
 
@@ -182,8 +141,10 @@ export default function CreateOnlineEvent() {
             value={formData.category}
             onChange={handleInputChange}
           >
+            <option value="Social">Social</option>
             <option value="Webinar">Webinar</option>
             <option value="Conference">Conference</option>
+            <option value="Meetup">Meetup</option>
           </select>
         </label>
 

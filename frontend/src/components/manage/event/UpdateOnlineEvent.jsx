@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import EventInfoCard from "../../cards/EventInfoCard";
-import { ToastContainer, toast,Bounce } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import toastNotify from "../../../utils/toastNotify";
 import "react-quill/dist/quill.snow.css";
 import "react-quill/dist/quill.snow.css";
 
@@ -15,7 +16,7 @@ export default function UpdateOnlineEvent() {
   const [events, setEvents] = useState([]);
 
   const [formData, setFormData] = useState({
-    eventId:"",
+    eventId: "",
     title: "",
     description: "",
     startDate: "",
@@ -77,17 +78,20 @@ export default function UpdateOnlineEvent() {
         if (response.status === 201) {
           const data = await response.json();
           setMessage(data.message);
+          toastNotify(response.status, data.message);
         }
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
           console.log(data.message);
           setMessage(data.message);
+          toastNotify(response.status, data.message);
         }
       })
       .catch((error) => {
         console.log(error);
         console.log(error.message);
         setMessage(error.message);
+        toastNotify(500, data.message);
       });
   }
 
@@ -115,54 +119,12 @@ export default function UpdateOnlineEvent() {
       });
   }, []);
 
-  function notify(status, serverMessage) {
-    if (status === 201) {
-      toast.success(serverMessage, {
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 404 || status === 400) {
-      toast.warn(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 500) {
-      toast.error(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  }
-
   return (
     <>
-    <h2 className="event-form-header">📝 Update online events </h2>
-    { events.length === 0 && (
-      <h2 className="no-events-header">No online events to update❕</h2>
-    )}
+      <h2 className="event-form-header">📝 Update online events </h2>
+      {events.length === 0 && (
+        <h2 className="no-events-header">No online events to update❕</h2>
+      )}
       {selectedEvent == null && (
         <div className="update-online-event">
           {events.map((eventObj, key) => (
@@ -238,8 +200,10 @@ export default function UpdateOnlineEvent() {
               value={formData.category}
               onChange={handleInputChange}
             >
-              <option value={"Webinar"}>Webinar</option>
-              <option value={"Conference"}>Conference</option>
+              <option value="Social">Social</option>
+              <option value="Webinar">Webinar</option>
+              <option value="Conference">Conference</option>
+              <option value="Meetup">Meetup</option>
             </select>
           </label>
           <label htmlFor="eventImage" className="event-file-label">
@@ -259,14 +223,12 @@ export default function UpdateOnlineEvent() {
               <img src={fileUrl} alt="Preview" style={{ maxWidth: "256px" }} />
             </div>
           )}
-          {message}
-
           <button type="submit" className="btn-submit">
             Complete Update
           </button>
         </form>
       )}
-      <ToastContainer/>
+      <ToastContainer />
     </>
   );
 }

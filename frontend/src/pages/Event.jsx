@@ -1,9 +1,11 @@
-import { ToastContainer, toast, Bounce } from "react-toastify";
-import { useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { Link, useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import "./Event.css";
+import toastNotify from "../utils/toastNotify";
+import dateConvert from "../utils/dateConvert";
 import AuthContext from "../context/AuthContext";
 import MapViewer from "../components/MapViewer";
+import "./Event.css";
 export default function Event() {
   const [eventData, setEventData] = useState({});
   const [organizer, setOrganizer] = useState("");
@@ -11,24 +13,9 @@ export default function Event() {
   const [attendCount, setAttendCount] = useState(0);
   const [message, setMessage] = useState("");
   const [btnText, setBtnText] = useState("");
-  const [address,setAddress] = useState(null);
+  const [address, setAddress] = useState(null);
   const { slug } = useParams();
   const { user } = useContext(AuthContext);
-
-
-  function formatDate(dateString) {
-    const date = new Date(dateString);
-    const day = date.getDay();
-    const month = date.getMonth();
-    const formattedDay = day < 10 ? "0" + day : day;
-    const formattedMonth = month < 10 ? "0" + month : month;
-    const year = date.getFullYear();
-    return `${formattedDay}/${formattedMonth}/${year}`;
-  }
-
-  const formattedStartDate = formatDate(eventData.startDate);
-  const formattedDueDate = formatDate(eventData.dueDate);
-  const publishedDay = formatDate(eventData.createdAt);
 
   useEffect(() => {
     fetch(`http://127.0.0.1:5000/event/${slug}`, {
@@ -40,7 +27,11 @@ export default function Event() {
           const data = await response.json();
           setEventData(data.event);
           setOrganizer(data.event.organizer);
-          setAddress(`${data.event.address} ` + `${data.event.city} `+`${data.event.country}`);
+          setAddress(
+            `${data.event.address} ` +
+              `${data.event.city} ` +
+              `${data.event.country}`
+          );
           console.log(address);
           setMessage(data.message);
         }
@@ -65,7 +56,7 @@ export default function Event() {
       setBtnText("Attend Event");
     }
   }),
-    [];
+    [eventData];
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/user/find-user-by-id", {
@@ -112,6 +103,7 @@ export default function Event() {
           const data = await response.json();
           setMessage(data.message);
           setLatestAttendees(data.latestAttendees);
+          console.log(latestAttendees);
           setAttendCount(data.attendarCount);
         }
         if (response.status === 404 || response.status === 400) {
@@ -122,58 +114,15 @@ export default function Event() {
       .catch((error) => {
         console.log(error.message);
         setMessage(error.message);
+        console.log(eventData.attendants);
       });
   }, [eventData]);
-
-
 
   function HTMLRenderer({ htmlContent }) {
     return <div dangerouslySetInnerHTML={{ __html: htmlContent }} />;
   }
 
-  function notify(status, serverMessage) {
-    if (status === 200) {
-      toast.success(serverMessage, {
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 404 || status === 400) {
-      toast.warn(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-    if (status === 500) {
-      toast.error(serverMessage, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-    }
-  }
-
-  console.log(eventData)
+  console.log(eventData);
 
   function handleAttendRequest(e) {
     e.preventDefault();
@@ -192,18 +141,18 @@ export default function Event() {
           const data = await response.json();
           console.log(data.message, 2324);
           setMessage(data.message);
-          notify(response.status, data.message);
+          toastNotify(response.status, data.message);
           setBtnText("Pending");
         }
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
           setMessage(data.message);
-          notify(response.status, data.message);
+          toastNotify(response.status, data.message);
         }
       })
       .catch((error) => {
         setMessage(data.message);
-        notify(error, data.message);
+        toastNotify(500, data.message);
         console.error(
           "There has been a problem with your fetch operation:",
           error
@@ -211,7 +160,6 @@ export default function Event() {
       });
   }
 
-  
   return (
     <>
       <section>
@@ -232,12 +180,16 @@ export default function Event() {
                 <path d="M8 2v4"></path>
                 <path d="M3 10h18"></path>
               </svg>
-              Created At: {publishedDay}
+              Created At: {dateConvert(eventData.createdAt, true)}
             </span>
 
             <figure>
               <picture>
-                <img src={`http://127.0.0.1:5000/event/img/${eventData._id}`} alt="Event Image" loading="lazy" />
+                <img
+                  src={`http://127.0.0.1:5000/event/img/${eventData._id}`}
+                  alt="Event Image"
+                  loading="lazy"
+                />
                 <figcaption>Caption:{eventData.title} Cover Image</figcaption>
               </picture>
             </figure>
@@ -263,16 +215,27 @@ export default function Event() {
                 </h2>
                 <article className="event-location">
                   <p>
-                    <span>Address: {eventData.address}</span>
+                    <span>👉Address: {eventData.address}</span>
                   </p>
                   <p>
-                    <span>City: {eventData.address}</span>
+                    <span>🏘️City: {eventData.city}</span>
                   </p>
                   <p>
-                    <span>State: {eventData.address}</span>
+                    <span>📌State: {eventData.state}</span>
                   </p>
                   <p>
-                    <span>Country: {eventData.address}</span>
+                    <span>🌎Country: {eventData.country}</span>
+                  </p>
+                  <p>
+                    <span>🔢Quota: {eventData.quota}</span>
+                  </p>
+                  <p>
+                    <span>
+                      📅 Start Date: {dateConvert(eventData.startDate)}
+                    </span>
+                  </p>
+                  <p>
+                    <span>📅Due Date: {dateConvert(eventData.dueDate)}</span>
                   </p>
                 </article>
               </>
@@ -281,7 +244,7 @@ export default function Event() {
             <div className="event-attenders">
               <h2
                 className="event-page-title"
-                style={{ fontSize: "1.5rem", margin: "24px 0 24px 0" }}
+                style={{ fontSize: "1.5rem", margin: "24px 0 0px 0" }}
               >
                 🧑Recent Attenders
               </h2>
@@ -301,7 +264,16 @@ export default function Event() {
               >
                 ⭐Organizer
               </h2>
-              <p>Organizer:{organizer}</p>
+              <p>
+                Organizer:
+                <Link
+                  to={`/profile/${organizer}`}
+                  target="_blank"
+                  style={{ textDecoration: "underline", color: "blue" }}
+                >
+                  {organizer}
+                </Link>
+              </p>
             </div>
 
             {!eventData.isOnline && (
@@ -312,7 +284,7 @@ export default function Event() {
                 >
                   📌 Event Location
                 </h2>
-                {address && ( <MapViewer eventAddress={address}/> )}
+                {address && <MapViewer eventAddress={address} />}
               </>
             )}
             <button className="btn-attend" onClick={handleAttendRequest}>

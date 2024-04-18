@@ -122,15 +122,33 @@ export default function Profile() {
           <div className="profile-social">
             <div>
               <FiTwitter />
-              <span><a href={`https://x.com/${user.twitter}`} target="_blank">{user.twitter}</a></span>
+              <span>
+                <a href={`https://x.com/${user.twitter}`} target="_blank">
+                  {user.twitter ? user.twitter : "--" }
+                </a>
+              </span>
             </div>
             <div>
               <BsSnapchat />
-              <span><a href={`https://snapchat.com/${user.snapchat}`} target="_blank">{user.twitter}</a></span>
+              <span>
+                <a
+                  href={`https://snapchat.com/${user.snapchat}`}
+                  target="_blank"
+                >
+                  {user.snapchat ? user.snapchat : "--"}
+                </a>
+              </span>
             </div>
             <div>
               <AiOutlineInstagram />
-              <span><a href={`https://instagram.com/${user.instagram}`} target="_blank">{user.twitter}</a></span>
+              <span>
+                <a
+                  href={`https://instagram.com/${user.instagram}`}
+                  target="_blank"
+                >
+                  {user.instagram ? user.instagram : "--"}
+                </a>
+              </span>
             </div>
           </div>
           <div className="profile-stats">
@@ -156,10 +174,13 @@ export default function Profile() {
           <HTMLRenderer htmlContent={user.biography} />
 
           <h2>Residency 📍</h2>
-          {user?.residency
-            ? user.residency.city + ", " + user.residency.country
-            : "No residency information."}
-          {message}
+          {user.residency ? (
+            <span>
+              {user.residency.city}, {user.residency.country}
+            </span>
+          ) : (
+            <span>No residency information.</span>
+          )}
         </article>
       </section>
     </>

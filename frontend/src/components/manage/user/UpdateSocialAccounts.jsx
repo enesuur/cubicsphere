@@ -1,13 +1,15 @@
 import { useContext, useState } from "react";
+import { ToastContainer } from "react-toastify";
+import toastNotify from "../../../utils/toastNotify";
 import AuthContext from "../../../context/AuthContext";
 
 export default function UpdateSocialAccounts() {
-    const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
     twitter: user?.twitter,
     instagram: user?.instagram,
-    snapchat: user?.snapchat
+    snapchat: user?.snapchat,
   });
 
   function handleInputChange(e) {
@@ -26,9 +28,9 @@ export default function UpdateSocialAccounts() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        twitter:formData.twitter,
-        instagram:formData.instagram,
-        snapchat:formData.snapchat
+        twitter: formData.twitter,
+        instagram: formData.instagram,
+        snapchat: formData.snapchat,
       }),
       credentials: "include",
     })
@@ -37,60 +39,64 @@ export default function UpdateSocialAccounts() {
           const data = await response.json();
           console.log(data.message);
           setMessage(data.message);
-          user.residency = formData;
+          toastNotify(response.status, data.message);
         }
         if (response.status === 404 || response.status === 400) {
           const data = await response.json();
           console.log(data.message);
           setMessage(data.message);
+          toastNotify(response.status, data.message);
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         console.log(error.message);
         setMessage(error.message);
+        toastNotify(500, data.message);
       });
   }
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <h2>Update Social Accounts 📱</h2>
-      <label htmlFor="twitter">
-        Twitter
-        <input
-          type="text"
-          placeholder="Twitter username"
-          id="twitter"
-          name="twitter"
-          value={formData.twitter}
-          onChange={handleInputChange}
-        />
-      </label>
-      <label htmlFor="country">
-        Snapchat
-        <input
-          type="text"
-          placeholder="Snapchat username"
-          name="snapchat"
-          id="snapchat"
-          value={formData.snapchat}
-          onChange={handleInputChange}
-        />
-      </label>
+    <>
+      <form onSubmit={handleFormSubmit}>
+        <h2>Update Social Accounts 📱</h2>
+        <label htmlFor="twitter">
+          Twitter
+          <input
+            type="text"
+            placeholder="Twitter username"
+            id="twitter"
+            name="twitter"
+            value={formData.twitter}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label htmlFor="country">
+          Snapchat
+          <input
+            type="text"
+            placeholder="Snapchat username"
+            name="snapchat"
+            id="snapchat"
+            value={formData.snapchat}
+            onChange={handleInputChange}
+          />
+        </label>
 
-      <label htmlFor="instagram">
-        Instagram
-        <input
-          type="text"
-          placeholder="Instagram username"
-          name="instagram"
-          id="instagram"
-          value={formData.instagram}
-          onChange={handleInputChange}
-        />
-      </label>
-      <span>{message}</span>
-      <button type="submit">Update</button>
-    </form>
+        <label htmlFor="instagram">
+          Instagram
+          <input
+            type="text"
+            placeholder="Instagram username"
+            name="instagram"
+            id="instagram"
+            value={formData.instagram}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="submit">Update</button>
+      </form>
+      <ToastContainer />
+    </>
   );
 }

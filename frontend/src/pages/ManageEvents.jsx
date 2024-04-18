@@ -8,7 +8,6 @@ import UpdatePhysicalEvent from "../components/manage/event/UpdatePhysicalEvent"
 import DeleteEvent from "../components/manage/event/DeleteEvent";
 import MyEvents from "../components/manage/event/MyEvents";
 
-
 export default function ManageEvents() {
   const [endPoint, setEndpoint] = useState("physical");
 
@@ -50,10 +49,9 @@ export default function ManageEvents() {
             {endPoint === "online" && <CreateOnlineEvent />}
             {endPoint === "update-online" && <UpdateOnlineEvent />}
             {endPoint === "update-physical" && <UpdatePhysicalEvent />}
-            {endPoint === "attend" && <AttendRequests/>}
+            {endPoint === "attend" && <AttendRequests />}
             {endPoint === "events" && <MyEvents />}
             {endPoint === "delete-event" && <DeleteEvent />}
-
           </div>
         </div>
       </section>

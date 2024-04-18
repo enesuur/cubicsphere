@@ -1,6 +1,6 @@
 import { ToastContainer, toast } from "react-toastify";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState,useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
@@ -21,6 +21,12 @@ export default function Login() {
       [name]: value,
     }));
   }
+
+  useEffect(() => {
+    if (authContext?.user?.username) {
+      navigate('/events');
+    }
+  }, [authContext.user]);
 
   function handleFormSubmit(e) {
     e.preventDefault();
