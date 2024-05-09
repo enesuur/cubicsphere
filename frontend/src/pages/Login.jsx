@@ -7,7 +7,7 @@ import "./Login.css";
 
 export default function Login() {
   const [formData, setFormData] = useState({
-    email: "denemehesap@gm.co",
+    email: "test1@gm.co",
     password: "123123123",
   });
   const [message, setMessage] = useState("");

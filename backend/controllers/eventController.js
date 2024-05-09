@@ -7,7 +7,7 @@ const { measureMemory } = require("vm");
 async function createPhysicalEvent(req, res) {
   try {
     const { title, description, startDate, dueDate, quota, address, city, state, country, category } = req.body;
-    console.log(category,1)
+    console.log(category, 1);
     if (
       !title ||
       !description ||
@@ -392,7 +392,7 @@ async function getFilteredEvents(req, res) {
     if (req.query.category) {
       query.category = { $regex: handleRegexOperation(req.query.category) };
     }
-    
+
     if (req.query.isOnline) {
       query.isOnline = req.query.isOnline === "true";
     }
@@ -405,7 +405,7 @@ async function getFilteredEvents(req, res) {
     const pages = Math.ceil(total / pageSize);
 
     if (page > pages) {
-      return res.status(404).json({ message: "The page you are looking for does not exist."});
+      return res.status(404).json({ message: "The page you are looking for does not exist." });
     }
 
     const data = await Event.find(query).limit(pageSize).skip(skip).exec();
@@ -482,6 +482,33 @@ async function getEventAttenders(req, res) {
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function latestAttenders(req, res) {
+  try {
+    const { eventId } = req.body;
+    if (!eventId || eventId === undefined) {
+      return res.status(400).json({ message: "No event id provided." });
+    }
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found." });
+    }
+    console.log(event)
+
+    const latestAttendees = event.attendRequests
+      .filter((request) => request.status === "accepted")
+      .slice(-5)
+      .map((request) => request.user);
+
+    const attendees = await User.find({ _id: { $in: latestAttendees } });
+  
+    return res.status(200).json({ latestAttendees: attendees });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error." });
   }
 }
 
@@ -606,6 +633,12 @@ async function attendToEvent(req, res) {
       return res.status(400).json({ message: "You are already the organizer of this event." });
     }
 
+    const userEventRequest = res.locals.user.eventRequests.find((request) => request.event.equals(eventId));
+
+    if (userEventRequest) {
+      return res.status(400).json({ message: "You have already sent a request for this event." });
+    }
+
     res.locals.user.events.forEach((event) => {
       if (event._id.equals(eventId)) {
         event.status = "pending";
@@ -682,5 +715,6 @@ module.exports = {
   attendToEvent,
   acceptAttender,
   rejectAttender,
-  getRequestedEvents
+  getRequestedEvents,
+  latestAttenders
 };

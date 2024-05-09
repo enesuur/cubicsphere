@@ -49,7 +49,7 @@ export default function SearchBar( {setFilteredEvents,setFilteredUsers}) {
   return (
     <input
       type="text"
-      placeholder="Search..."
+      placeholder="Search... 🔍"
       value={searchTerm}
       onChange={handleOnChange}
     />

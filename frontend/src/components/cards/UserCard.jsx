@@ -29,7 +29,7 @@ export default function UserCard({ user }) {
         <p>
           <span>Profile:</span>
           <span>
-            <Link to={`/user/${user.username}`}>Click for display</Link>
+            <Link to={`/profile/${user.username}`}>Click for display</Link>
           </span>
         </p>
       </div>

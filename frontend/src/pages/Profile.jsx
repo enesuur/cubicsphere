@@ -124,7 +124,7 @@ export default function Profile() {
               <FiTwitter />
               <span>
                 <a href={`https://x.com/${user.twitter}`} target="_blank">
-                  {user.twitter ? user.twitter : "--" }
+                  {user.twitter ? user.twitter : "--"}
                 </a>
               </span>
             </div>
@@ -174,7 +174,7 @@ export default function Profile() {
           <HTMLRenderer htmlContent={user.biography} />
 
           <h2>Residency 📍</h2>
-          {user.residency ? (
+          {user.residency && Object.keys(user.residency).length > 0 ? (
             <span>
               {user.residency.city}, {user.residency.country}
             </span>

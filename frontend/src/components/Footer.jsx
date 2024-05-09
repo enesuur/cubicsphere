@@ -10,13 +10,10 @@ export default function Footer() {
             <Link to={"/"}>Homepage</Link>
           </li>
           <li>
-            <Link to={"/tokenomics"}>Register</Link>
+            <Link to={"/register"}>Register</Link>
           </li>
           <li>
-            <Link to={"/getpin"}>Login</Link>
-          </li>
-          <li>
-            <Link to={"/about"}>About</Link>
+            <Link to={"/login"}>Login</Link>
           </li>
         </ul>
         <div className="footer-aside">

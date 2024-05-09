@@ -83,7 +83,7 @@ export default function EventCard({ eventObj }) {
           <span>📌 City:24</span>
         </p>
         <p>
-          <span>🔢 Quota: {`${eventObj.attendants.length}/${eventObj.quota}`}</span>
+          <span>🔢 Quota: {`${eventObj.attendants.length - 1}/${eventObj.quota}`}</span>
         </p>
         <p>
           <span>⭐Organizer:</span>

@@ -38,7 +38,7 @@ export default function EventRequestCard({ user, eventObj }) {
           </p>
           <p>
             <span>Event quota:</span>
-            <span>{`${eventObj.attendants.length}/${eventObj.quota}`}</span>
+            <span>{`${eventObj.attendants.length - 1}/${eventObj.quota}`}</span>
           </p>
           <p>
             <span>Request Status:</span>

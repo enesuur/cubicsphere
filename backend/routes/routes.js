@@ -20,7 +20,8 @@ const {
   acceptAttender,
   rejectAttender,
   getRequestedEvents,
-  searchEvents
+  searchEvents,
+  latestAttenders
 }
 = require("../controllers/eventController");
 const {
@@ -69,7 +70,7 @@ route.get("/event/user-physical-events",checkUser,getUserPhysicalEvents);
 route.get("/event/user-events",checkUser,getUserEvents);
 route.get("/event/latest-events",getLatestEvents);
 route.get("/event/img/:eventId",getEventImage);
-route.post("/event/event-attenders",getEventAttenders);
+route.post("/event/latest-attenders",latestAttenders);
 route.post("/event/create-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], createPhysicalEvent);
 route.post("/event/create-online-event", [checkUser,uploadImg.single("eventImage"),processImage], createOnlineEvent);
 route.put("/event/update-physical-event", [checkUser,uploadImg.single("eventImage"),processImage], updatePhysicalEvent);

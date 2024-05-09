@@ -4,9 +4,7 @@ import TrekkingImg from "../assets/img/trekking.png";
 import PriceCard from "../components/cards/PriceCard";
 import "./Home.css";
 
-
 export default function Home() {
- 
   return (
     <>
       <section>
@@ -32,11 +30,11 @@ export default function Home() {
               <article>
                 <h2>Global</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Aliquid dolor ducimus consectetur? At porro modi voluptatum!
-                  Quos ullam numquam beatae cumque vitae quia itaque nesciunt
-                  adipisci velit nobis officiis eligendi, odio voluptates iusto
-                  iste quas obcaecati inventore aliquam veritatis reiciendis!
+                  Introducing Gather on Cubic Sphere: Your global connection hub
+                  for spontaneous meetups, cultural exploration, and meaningful
+                  encounters. Explore the world, connect with people based on
+                  location, and embrace the diversity of our planet. Join us and
+                  redefine the way you experience the world.
                 </p>
               </article>
             </div>
@@ -45,12 +43,13 @@ export default function Home() {
               <article>
                 <h2>Events</h2>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Assumenda odit ut rerum expedita ipsum sunt ratione nemo iusto
-                  asperiores nisi aperiam possimus veniam excepturi voluptatum
-                  illum quod, impedit tempora quisquam quae earum obcaecati
-                  temporibus. Beatae reprehenderit delectus aliquid dignissimos
-                  vel.
+                  Social is a groundbreaking app that enhances social
+                  connectivity and enriches interpersonal relationships. With
+                  features catering to all social needs, from meeting new
+                  friends to organizing gatherings, Social provides a seamless
+                  and intuitive user experience. Join today and experience a new
+                  level of socialization that enhances your life in countless
+                  ways.
                 </p>
               </article>
               <figure>
@@ -73,12 +72,13 @@ export default function Home() {
               <article>
                 <h2>Social</h2>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Voluptas dolores ipsam reiciendis assumenda nihil unde
-                  voluptatum odit corrupti blanditiis accusamus? Perferendis
-                  totam voluptas consequuntur voluptatum sed repudiandae
-                  veritatis ex quos necessitatibus laudantium, libero animi ad
-                  dignissimos corrupti, error ullam exercitationem?
+                  Social is a groundbreaking app that enhances social
+                  connectivity and enriches interpersonal relationships. With
+                  features catering to all social needs, from meeting new
+                  friends to organizing gatherings, Social provides a seamless
+                  and intuitive user experience. Join today and experience a new
+                  level of socialization that enhances your life in countless
+                  ways.
                 </p>
               </article>
             </div>

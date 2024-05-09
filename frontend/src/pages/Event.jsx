@@ -88,13 +88,14 @@ export default function Event() {
   }, [eventData]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/event/event-attenders", {
+    fetch("http://127.0.0.1:5000/event/latest-attenders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         attendList: eventData.attendants,
+        eventId: eventData._id,
       }),
       credentials: "include",
     })
@@ -252,7 +253,15 @@ export default function Event() {
                 <p>No one has joined yet!</p>
               ) : (
                 latestAttendees.map((attender, idx) => (
-                  <span key={idx}>-{attender.username}</span>
+                  <span 
+                  key={idx}
+                  style={{color:"blue",textDecoration:"underline"}}
+                  >
+                    -
+                    <Link to={`/profile/${attender.username}`}>
+                      {attender.username}
+                    </Link>
+                  </span>
                 ))
               )}
             </div>
