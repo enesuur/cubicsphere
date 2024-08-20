@@ -6,7 +6,7 @@ Cubic Sphere is an open-source event-driven social media web application designe
 
 ![Home Page Of the Application](https://i.hizliresim.com/tds12ao.png)
 ![A page from app](https://i.hizliresim.com/k7i7xdr.png)
-![A page from app](https://i.hizliresim.com/tds12ao.png)
+![A page from app](https://i.hizliresim.com/3skbjiw.png)
 ![A page from app](https://i.hizliresim.com/8hl7b32.png)
 ![A page from app](https://i.hizliresim.com/k7rwqze.png)
 
