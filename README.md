@@ -39,7 +39,7 @@ Clone the repository on your machine and follow the steps below for a successful
 After the dependencies installed.
 
 2. **Run the Development Server:**
-   Navigate to the root directory of the project and run: start the development server with:
+   Navigate to the root directory of the project(frontend and backend) and run: start the development server with:
 
    ```
    Frontend
