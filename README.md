@@ -42,9 +42,16 @@ After the dependencies installed.
    Navigate to the root directory of the project and run: start the development server with:
 
    ```
+   Frontend
    npm run dev
    or
    yarn dev
+
+   ----
+   Backend
+   npm start
+   or
+   yarn start
    ```
 
 3. **Final Step**
